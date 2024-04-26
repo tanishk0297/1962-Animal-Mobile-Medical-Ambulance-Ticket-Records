@@ -100,12 +100,22 @@ li {
 
 
 select {
-    width: 20%; /* Set width to 100% */
+    width: 100%; /* Set width to 100% */
     padding: 8px; /* Add padding */
     border: 1px solid #ccc; /* Add border */
     border-radius: 4px; /* Add border radius */
 }
-
+#select-label {
+    margin: 0;
+    font-size: 24px; /* Increase font size for a captivating subheader */
+    text-align: center;
+    font-weight: bold;
+    color: #000000; /* Adjust color as needed */
+    margin-bottom: 5px;
+    display: block;
+    text-align: center;
+  }
+  
 .loader {
     border: 8px solid #f3f3f3; /* Light grey */
     border-top: 8px solid #3498db; /* Blue */
@@ -142,3 +152,53 @@ select {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Button Styles */
+button#print-btn {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    margin: 8px auto; /* Center the button horizontally */
+    display: block; /* Display the button as a block element */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+/* 
+ */
+
+ /* Add styles for the display strip container */
+#display-strip-container {
+    background-color: #f4f4f4; /* Background color */
+    padding: 10px 20px; /* Padding */
+    overflow: hidden; /* Hide overflow content */
+}
+
+/* Add styles for the display strip */
+#display-strip {
+    white-space: nowrap; /* Prevent items from wrapping to new lines */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    scrollbar-width: none; /* Firefox */
+  }
+  
+ 
+  @keyframes rainbow {
+    0% { color: red; }
+    16% { color: orange; }
+    33% { color: goldenrod; }
+    50% { color: green; }
+    66% { color: blue; }
+    83% { color: indigo; }
+    100% { color: violet; }
+}
+
+.display-item {
+    display: inline-block;
+    margin-right: 20px;
+    animation: rainbow 7s infinite; /* Apply rainbow animation */
+}
+

@@ -333,3 +333,4 @@ async function fetchRecordsForCar(selectedCarNumber) {
         hideAttendanceLoader();
     }
 }
+

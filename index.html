@@ -15,30 +15,37 @@
     
     <main>
         
-        <section id="detail-section">
-            <h2>Details</h2>
-            <p>District: Sagar</p>
-            <p>Vikas Khand: Rahatgarh</p>
-            
-            <div id="car-selector-container">
-                <label for="car-number-selector">Select Vehicle No::</label>
-                <select id="car-number-selector">
-                    <!-- Add other car numbers here -->
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                </select>
+            <div id="display-strip-container">
+                <div id="display-strip"></div>
             </div>
+              
+        
+        <section>
+        <div id="car-selector-container">
+            <label for="car-number-selector" id="select-label">Select Vehicle No:</label>
+            <select id="car-number-selector">
+                <!-- Add other car numbers here -->
+                <option value="1">1. MP-02-ZA-0 104 (केसली)</option>
+                <option value="2">2. MP-02-ZA-0 105 (मालथौन)</option>
+                <option value="3">3. MP-02-ZA-0 106 (सागर 1)</option>
+                <option value="4">4. MP-02-ZA-0 107 (रहली)</option>
+                <option value="5">5. MP-02-ZA-0 108 (देवरी)</option>
+                <option value="6">6. MP-02-ZA-0 109 (जैसीनगर)</option>
+                <option value="7">7. MP-02-ZA-0 110 (खुरई)</option>
+                <option value="8">8. MP-02-ZA-0 111 (वण्‍डा)</option>
+                <option value="9">9. MP-02-ZA-0 112 (शाहगढ)</option>
+                <option value="10">10. MP-02-ZA-0 113 (सागर 2)</option>
+                <option value="11">11. MP-02-ZA-0 114 (सागर HQ)</option>
+                <option value="12">12. MP-02-ZA-0 115 (बीना)</option>
+                <option value="13">13. MP-02-ZA-0 116 (राहतगढ)</option>
+            </select>
+            <button id="print-btn">Print or Save as PDF</button>
+
+        </div>
+    </section>
+        
+        <section id="detail-section">
+                  
         </section>
         <section>
             <h2 id="heading">Staff Attendance</h2>  
@@ -78,6 +85,7 @@
     </main>
     <script src="/airtable.browser.js"></script> <!-- Include any scripts you need -->
     <script src="script.js"></script> <!-- Your custom JavaScript file -->
+    <script src="displaystrip.js"></script> <!-- Your custom JavaScript file -->
     <script>
       // Get the header elements
 const dynamicDateElement = document.getElementById('dynamic-date');
@@ -87,10 +95,12 @@ const dynamicDateRangeElement = document.getElementById('dynamic-date-range');
 function updateDateTime() {
     const currentDate = new Date();
 
-    // Update date
-    const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = currentDate.toLocaleDateString('en-US', optionsDate);
-    dynamicDateElement.textContent = formattedDate;
+   // Update date
+const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+const formattedDate = currentDate.toLocaleDateString('en-US', optionsDate);
+const splitDate = formattedDate.split(', '); // Splitting the date string
+const finalDate = splitDate[0] + ' ' + splitDate[1]; // Combining the date parts without the comma
+dynamicDateElement.textContent = finalDate;
 
     // Get next month
     const nextMonthDate = new Date(currentDate);
@@ -115,6 +125,101 @@ updateDateTime();
 setInterval(updateDateTime, 1000);
 
     </script>
+
+    <!-- details -->
+    <script>
+        // Function to update vehicle details based on the selected option
+        function updateVehicleDetails() {
+            const selectedOption = document.getElementById('car-number-selector').value;
+            const detailsContainer = document.getElementById('detail-section');
+    
+            // Define the vehicle details corresponding to each option value
+            const vehicleDetails = {
+                "1": { number: "MP-02-ZA-0 104", location: "केसली" },
+                "2": { number: "MP-02-ZA-0 105", location: "मालथौन" },
+                "3": { number: "MP-02-ZA-0 106", location: "सागर 1" },
+                "4": { number: "MP-02-ZA-0 107", location: "रहली" },
+                "5": { number: "MP-02-ZA-0 108", location: "देवरी" },
+                "6": { number: "MP-02-ZA-0 109", location: "जैसीनगर" },
+                "7": { number: "MP-02-ZA-0 110", location: "खुरई" },
+                "8": { number: "MP-02-ZA-0 111", location: "वण्‍डा" },
+                "9": { number: "MP-02-ZA-0 112", location: "शाहगढ" },
+                "10": { number: "MP-02-ZA-0 113", location: "सागर 2" },
+                "11": { number: "MP-02-ZA-0 114", location: "सागर HQ" },
+                "12": { number: "MP-02-ZA-0 115", location: "बीना" },
+                "13": { number: "MP-02-ZA-0 116", location: "राहतगढ" }
+                // Add more options as needed
+            };
+    
+            // Update details based on the selected option
+            const selectedVehicleDetails = vehicleDetails[selectedOption];
+            if (selectedVehicleDetails) {
+                // Update the HTML content of the details container
+                detailsContainer.innerHTML = `
+                    <h2>Details</h2>
+                    <p>Number: ${selectedOption}</p>
+                    <p>District: Sagar</p>
+                    <p>Vikas Khand: ${selectedVehicleDetails.location}</p>
+                    <p>Vehicle Number: ${selectedVehicleDetails.number}</p>
+                   
+                    
+                `;
+            }
+        }
+    
+        // Add event listener to the dropdown to call the function when selection changes
+        document.getElementById('car-number-selector').addEventListener('change', updateVehicleDetails);
+    
+        // Call the function initially to populate details for the default selected option
+        updateVehicleDetails();
+    </script>
+    <!-- print btn -->
+    <script>
+        document.getElementById('print-btn').addEventListener('click', function() {
+            // Get the current date
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().split('T')[0];
+    
+            // Get the selected vehicle details
+            const selectedOption = document.getElementById('car-number-selector').value;
+            const vehicleDetails = {
+                "1": { location: "केसली" },
+                "2": { location: "मालथौन" },
+                "3": { location: "सागर 1" },
+                "4": { location: "रहली" },
+                "5": { location: "देवरी" },
+                "6": { location: "जैसीनगर" },
+                "7": { location: "खुरई" },
+                "8": { location: "वण्‍डा" },
+                "9": { location: "शाहगढ" },
+                "10": { location: "सागर 2" },
+                "11": { location: "सागर HQ" },
+                "12": { location: "बीना" },
+                "13": { location: "राहतगढ" }
+                // Add more options as needed
+            };
+            const selectedLocation = vehicleDetails[selectedOption].location;
+    
+            // Set the filename
+            const filename = `${formattedDate}-${selectedLocation}-Vehicle-${selectedOption}.pdf`;
+    
+            // Check if printing is supported
+            if (window.print) {
+                window.print(); // Print the page
+            } else {
+                // If printing is not supported, save as PDF
+                const options = {
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 1.0 }, // Set image type and quality
+                    html2canvas: { scale: 2 }, // Set scale for better quality
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } // Set PDF format and orientation
+                    
+                };
+                html2pdf().from(document.body).set(options).save(); // Save as PDF
+            }
+        });
+    </script>
+    
 </body>
 
 </html>

@@ -23,32 +23,29 @@
         <h2 id="heading">Attendance</h2>
         <form id="attendance-form">
             <div class="form-group">
-                <label for="doctor">Doctor</label>
-                <input type="radio" id="doctor-present" name="doctor" value="present">
-                <label for="doctor-present">Present</label>
-                <input type="radio" id="doctor-absent" name="doctor" value="absent">
-                <label for="doctor-absent">Absent</label>
-                <input type="radio" id="doctor-leave" name="doctor" value="leave">
-                <label for="doctor-leave">Leave</label>
+                <label for="doctor">Doctor:</label>
+                <select id="doctor" name="doctor">
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="leave">Leave</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="assistant">Assist&nbsp;</label>
-                <input type="radio" id="assistant-present" name="assistant" value="present">
-                <label for="assistant-present">Present</label>
-                <input type="radio" id="assistant-absent" name="assistant" value="absent">
-                <label for="assistant-absent">Absent</label>
-                <input type="radio" id="assistant-leave" name="assistant" value="leave">
-                <label for="assistant-leave">Leave</label>
+                <label for="assistant">Assistant:</label>
+                <select id="assistant" name="assistant">
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="leave">Leave</option>
+                </select>
             </div>
             <div class="form-group">
-                <label for="driver">Driver&nbsp;</label>
-                <input type="radio" id="driver-present" name="driver" value="present">
-                <label for="driver-present">Present</label>
-                <input type="radio" id="driver-absent" name="driver" value="absent">
-                <label for="driver-absent">Absent</label>
-                <input type="radio" id="driver-leave" name="driver" value="leave">
-                <label for="driver-leave">Leave</label>
-            </div>
+                <label for="driver">Driver:</label>
+                <select id="driver" name="driver">
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="leave">Leave</option>
+                </select>
+            </div>            
             <button type="button" id="submit-attendance-btn">Submit Attendance</button>
         </form>
     </div>

@@ -272,12 +272,64 @@ function adjustTableForMobile() {
 // Call adjustTableForMobile() function whenever the window is resized
 window.addEventListener('resize', adjustTableForMobile);
 
+// Show loader function for ticket section
+function showTicketLoader() {
+    document.getElementById('ticket-loader').style.display = 'block';
+}
+
+// Hide loader function for ticket section
+function hideTicketLoader() {
+    document.getElementById('ticket-loader').style.display = 'none';
+}
+
+// Show loader function for collection section
+function showCollectionLoader() {
+    document.getElementById('collection-loader').style.display = 'block';
+}
+
+// Hide loader function for collection section
+function hideCollectionLoader() {
+    document.getElementById('collection-loader').style.display = 'none';
+}
+
+// Show loader function for attendance section
+function showAttendanceLoader() {
+    document.getElementById('attendance-loader').style.display = 'block';
+}
+
+// Hide loader function for attendance section
+function hideAttendanceLoader() {
+    document.getElementById('attendance-loader').style.display = 'none';
+}
+
 async function fetchRecordsForCar(selectedCarNumber) {
-    // Call the function to fetch ticket records for the selected car number
-    await fetchLatestTicketRecord(selectedCarNumber);
-    // Call the function to fetch collection records for the selected car number
-    await fetchLatestCollectionRecord(selectedCarNumber);
-    // Call the function to fetch attendance records for the selected car number
-    await fetchAttendance(selectedCarNumber);
-    // You can add similar function calls for fetching other records if needed
+    try {
+        // Show loaders for each section
+        showTicketLoader();
+        showCollectionLoader();
+        showAttendanceLoader();
+
+        // Call the function to fetch ticket records for the selected car number
+        await fetchLatestTicketRecord(selectedCarNumber);
+        // Hide ticket loader after fetching ticket records
+        hideTicketLoader();
+
+        // Call the function to fetch collection records for the selected car number
+        await fetchLatestCollectionRecord(selectedCarNumber);
+        // Hide collection loader after fetching collection records
+        hideCollectionLoader();
+
+        // Call the function to fetch attendance records for the selected car number
+        await fetchAttendance(selectedCarNumber);
+        // Hide attendance loader after fetching attendance records
+        hideAttendanceLoader();
+        
+        // You can add similar function calls for fetching other records if needed
+    } catch (error) {
+        console.error('Error fetching records:', error);
+        // Hide loaders in case of an error
+        hideTicketLoader();
+        hideCollectionLoader();
+        hideAttendanceLoader();
+    }
 }

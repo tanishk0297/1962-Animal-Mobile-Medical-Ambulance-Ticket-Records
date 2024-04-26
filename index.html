@@ -14,11 +14,12 @@
     </header>
     
     <main>
+        
         <section id="detail-section">
             <h2>Details</h2>
             <p>District: Sagar</p>
             <p>Vikas Khand: Rahatgarh</p>
-            <p>Vehicle No: MP 02 A 0159</p>
+            
             <div id="car-selector-container">
                 <label for="car-number-selector">Select Vehicle No::</label>
                 <select id="car-number-selector">
@@ -40,7 +41,8 @@
             </div>
         </section>
         <section>
-            <h2 id="heading">Staff Attendance</h2>           
+            <h2 id="heading">Staff Attendance</h2>  
+            <div id="attendance-loader" class="loader"></div>         
             <table id="attendance-table">
                 <thead>
                     <tr>
@@ -61,12 +63,14 @@
         </div>
         <section id="section1">
             <h2>Ticket Summary</h2>
+            <div id="ticket-loader" class="loader"></div>
             <ul id="ticket-summary">
                 <!-- Ticket summary will be populated dynamically -->
             </ul>
         </section>
         <section id="section1">
             <h2>Collection Summary</h2>
+            <div id="collection-loader" class="loader"></div>
             <ul id="collection-summary">
                 <!-- Collection summary will be populated dynamically -->
             </ul>

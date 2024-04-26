@@ -97,13 +97,48 @@ li {
 }
 
 /* Media Queries for Responsiveness */
-@media only screen and (max-width: 768px) {
-    /* Add responsive styles here */
-}
+
 
 select {
-    width: 10%; /* Set width to 100% */
+    width: 20%; /* Set width to 100% */
     padding: 8px; /* Add padding */
     border: 1px solid #ccc; /* Add border */
     border-radius: 4px; /* Add border radius */
+}
+
+.loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    display: none; /* Initially hidden */
+}
+
+#attendance-loader {
+    top: 50%;
+    left: 50%;
+    margin-top: -25px; /* Negative half of height */
+    margin-left: -25px; /* Negative half of width */
+}
+
+#ticket-loader {
+    top: 50%;
+    left: 50%;
+    margin-top: -25px; /* Negative half of height */
+    margin-left: -25px; /* Negative half of width */
+}
+
+#collection-loader {
+    top: 50%;
+    left: 50%;
+    margin-top: -25px; /* Negative half of height */
+    margin-left: -25px; /* Negative half of width */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

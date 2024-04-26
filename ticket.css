@@ -195,3 +195,21 @@ nav ul li a {
 nav ul li a:hover {
     background-color: #1a252f;
 }
+
+@media (max-width: 700px) {
+    nav ul li {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 10px; /* Add some space between list items */
+    }
+
+    nav ul li:last-child {
+        margin-bottom: 0; /* Remove bottom margin from last item */
+    }
+}
+
+@media (max-width: 400px) {
+    nav ul li a {
+        padding: 8px 16px; /* Reduce padding to conserve space */
+    }
+}

@@ -1,0 +1,197 @@
+/* Reset and Global Styles */
+body {
+    font-family: Arial, sans-serif; /* Set default font family */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+}
+
+header {
+    background-color: #2c3e50; /* Set background color for header */
+    color: #fff; /* Set text color for header */
+    padding: 20px; /* Add padding to header */
+    text-align: center; /* Center align text in header */
+}
+
+main {
+    display: flex; /* Use flexbox for main content */
+    justify-content: center; /* Center align content horizontally */
+    align-items: flex-start; /* Align items at the start of the cross axis */
+    padding: 20px; /* Add padding to main content */
+}
+
+/* Styles for form container and record list */
+.form-container,
+.record-list {
+    background-color: #f2f2f2; /* Set background color */
+    border-radius: 8px; /* Add border radius */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    padding: 20px; /* Add padding */
+    margin: 10px; /* Add margin */
+}
+
+.form-container h2,
+.record-list h2 {
+    color: #333; /* Set text color */
+    font-size: 24px; /* Set font size */
+    margin-top: 0; /* Remove top margin */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Add margin bottom */
+}
+
+label {
+    display: block; /* Display labels as block elements */
+    margin-bottom: 5px; /* Add margin bottom */
+}
+
+input[type="number"] {
+    width: 100%; /* Set input width to 100% */
+    padding: 8px; /* Add padding */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 4px; /* Add border radius */
+}
+
+button {
+    background-color: #2c3e50; /* Set background color */
+    color: #fff; /* Set text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Add padding */
+    border-radius: 4px; /* Add border radius */
+    cursor: pointer; /* Set cursor to pointer */
+    transition: background-color 0.3s; /* Add transition effect */
+}
+
+button:hover {
+    background-color: #1a252f; /* Change background color on hover */
+}
+
+ul {
+    list-style: none; /* Remove list styles */
+    padding: 0; /* Remove default padding */
+}
+
+li {
+    border-bottom: 1px solid #ccc; /* Add bottom border */
+    padding: 10px 0; /* Add padding */
+}
+
+li:last-child {
+    border-bottom: none; /* Remove bottom border from last child */
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column; /* Change flex direction to column on smaller screens */
+        align-items: center; /* Center align items vertically */
+    }
+
+    .form-container,
+    .record-list {
+        width: 100%; /* Set width to 100% on smaller screens */
+        margin: 10px 0; /* Adjust margin */
+    }
+}
+
+/* Ticket Record Styles */
+.record-list li {
+    padding: 20px; /* Add padding */
+    border-radius: 8px; /* Add border radius */
+    margin-bottom: 20px; /* Add margin bottom */
+    background-color: #fff; /* Set background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+.record-list li:nth-child(even) {
+    background-color: #f9f9f9; /* Set background color for even rows */
+}
+
+.ticket-heading {
+    font-weight: bold; /* Set font weight to bold */
+    color: #333; /* Set text color */
+    margin-bottom: 10px; /* Add margin bottom */
+}
+
+.ticket-detail {
+    color: #555; /* Set text color */
+}
+
+/* Ticket Status Styles */
+.ticket-item {
+    margin-bottom: 10px; /* Add margin bottom */
+    padding: 10px; /* Add padding */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Add border radius */
+    background-color: #f9f9f9; /* Set background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+.ticket-content {
+    color: #333; /* Set text color */
+}
+
+/* Different ticket status values */
+.ticket-value-new {
+    font-weight: bold; /* Set font weight to bold */
+    color: rgb(24, 157, 157); /* Set text color */
+}
+
+.ticket-value-pending {
+    font-weight: bold; /* Set font weight to bold */
+    color: rgb(234, 197, 12); /* Set text color */
+}
+
+.ticket-value-attended {
+    font-weight: bold; /* Set font weight to bold */
+    color: green; /* Set text color */
+}
+
+.ticket-value-cancelled {
+    font-weight: bold; /* Set font weight to bold */
+    color: red; /* Set text color */
+}
+
+/* No Records Banner */
+.no-records-banner {
+    margin-bottom: 10px; /* Add margin bottom */
+    padding: 10px; /* Add padding */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Add border radius */
+    background-color: #f9f9f9; /* Set background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    color: #333; /* Set text color */
+}
+
+nav {
+    background-color: #2c3e50;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style: none; /* Remove default list-style */
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav ul li:last-child {
+    margin-right: 0;
+}
+
+nav ul li a {
+    display: block;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+
+nav ul li a:hover {
+    background-color: #1a252f;
+}

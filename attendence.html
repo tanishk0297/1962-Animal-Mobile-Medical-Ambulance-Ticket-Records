@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Attendance Record</title>
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="attendence.css">
+</head>
+<body>
+    <header>
+        <h1>1962: Animal Mobile Medical Ambulance Staff Attendance Records</h1>
+        <nav>
+            <ul>
+                <li><a href="ticket.html">Ticket Records</a></li>
+                <li><a href="collection.html">Collection Records</a></li>
+                <li><a href="attendence.html">Attendance Records</a></li>
+                <li><a href=""></a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="form-container">
+        <h2 id="heading">Attendance</h2>
+        <form id="attendance-form">
+            <div class="form-group">
+                <label for="doctor">Doctor:</label>
+                <input type="radio" id="doctor-present" name="doctor" value="present">
+                <label for="doctor-present">Present</label>
+                <input type="radio" id="doctor-absent" name="doctor" value="absent">
+                <label for="doctor-absent">Absent</label>
+                <input type="radio" id="doctor-leave" name="doctor" value="leave">
+                <label for="doctor-leave">Leave</label>
+            </div>
+            <div class="form-group">
+                <label for="assistant">Assist:</label>
+                <input type="radio" id="assistant-present" name="assistant" value="present">
+                <label for="assistant-present">Present</label>
+                <input type="radio" id="assistant-absent" name="assistant" value="absent">
+                <label for="assistant-absent">Absent</label>
+                <input type="radio" id="assistant-leave" name="assistant" value="leave">
+                <label for="assistant-leave">Leave</label>
+            </div>
+            <div class="form-group">
+                <label for="driver">Driver:</label>
+                <input type="radio" id="driver-present" name="driver" value="present">
+                <label for="driver-present">Present</label>
+                <input type="radio" id="driver-absent" name="driver" value="absent">
+                <label for="driver-absent">Absent</label>
+                <input type="radio" id="driver-leave" name="driver" value="leave">
+                <label for="driver-leave">Leave</label>
+            </div>
+            <button type="button" id="submit-attendance-btn">Submit Attendance</button>
+        </form>
+    </div>
+
+    <section>
+        <h2 id="heading">Staff Attendance</h2>
+        <table id="attendance-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Doctor</th>
+                    <th>Assist</th>
+                    <th>Driver</th>
+                </tr>
+            </thead>
+            <tbody id="attendance-body">
+                <!-- Attendance records will be dynamically added here -->
+            </tbody>
+        </table>
+    </section>
+    <div class="pagination">
+        <button id="prev-btn">Previous</button>
+        <button id="next-btn">Next</button>
+    </div>
+    
+    <script src="/airtable.browser.js"></script>
+    <script src="/attendence.js"></script>
+</body>
+</html>

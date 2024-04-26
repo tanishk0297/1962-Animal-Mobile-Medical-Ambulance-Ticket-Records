@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Collection Records</title>
+    <link rel="stylesheet" href="collection.css">
+</head>
+<body>
+    <header>
+        <h1>1962: Animal Mobile Medical Ambulance Collection Records</h1>
+        <h1></h1>
+        <nav>
+            <ul>
+                <li><a href="ticket.html">Ticket Records</a></li>
+                <li><a href="collection.html">Collection Records</a></li>
+                <li><a href="attendence.html">Attendance Records</a></li>
+                <li><a href=""></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-container">
+            <h2>Add New Collection Record</h2>
+            <form id="new-collection-form">
+                <div class="form-group">
+                    <label for="general-animals">General Animals:</label>
+                    <input type="number" id="general-animals" name="general-animals" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="dogs">Dogs:</label>
+                    <input type="number" id="dogs" name="dogs" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="other-animals">Other Animals:</label>
+                    <input type="number" id="other-animals" name="other-animals" required>
+                </div>
+        
+                <button type="submit">Add Record</button> <!-- Moved the button inside the form -->
+            </form>
+        </section>
+
+        <section class="record-container">
+            <h2 id="heading">Collection Records</h2>
+            <div id="record-list" class="card"></div>
+            <div class="pagination">
+                <button id="prev-page-btn">Prev</button>
+                <button id="next-page-btn">Next</button>
+            </div>
+        </section>
+    </main>
+    
+    <script src="/airtable.browser.js"></script>
+    <script src="collection.js"></script>
+</body>
+</html>

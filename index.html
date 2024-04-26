@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public View</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <header>
+        <h1>1962: Animal Mobile Medical Ambulance Ticket Records</h1>
+        <h2 id="dynamic-date-range"></h2>
+        <h1 id="dynamic-date"></h1>
+    </header>
+    
+    
+    <main>
+        <section id="detail-section">
+            <h2>Details</h2>
+            <p>District: Sagar</p>
+            <p>Vikas Khand: Rahatgarh</p>
+            <p>Vehicle No: MP 02 A 0159</p>
+        </section>
+        <section>
+            <h2 id="heading">Staff Attendance</h2>
+            <table id="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Doctor</th>
+                        <th>Assistant</th>
+                        <th>Driver</th>
+                    </tr>
+                </thead>
+                <tbody id="attendance-body">
+                    <!-- Attendance records will be dynamically added here -->
+                </tbody>
+            </table>
+        </section>
+        <div class="pagination">
+            <button id="prev-btn">Previous</button>
+            <button id="next-btn">Next</button>
+        </div>
+        <section id="section1">
+            <h2>Ticket Summary</h2>
+            <ul id="ticket-summary">
+                <!-- Ticket summary will be populated dynamically -->
+            </ul>
+        </section>
+        <section id="section1">
+            <h2>Collection Summary</h2>
+            <ul id="collection-summary">
+                <!-- Collection summary will be populated dynamically -->
+            </ul>
+        </section>
+    </main>
+    <script src="/airtable.browser.js"></script> <!-- Include any scripts you need -->
+    <script src="script.js"></script> <!-- Your custom JavaScript file -->
+    <script>
+      // Get the header elements
+const dynamicDateElement = document.getElementById('dynamic-date');
+const dynamicDateRangeElement = document.getElementById('dynamic-date-range');
+
+// Function to update the date and date range
+function updateDateTime() {
+    const currentDate = new Date();
+
+    // Update date
+    const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = currentDate.toLocaleDateString('en-US', optionsDate);
+    dynamicDateElement.textContent = formattedDate;
+
+    // Get next month
+    const nextMonthDate = new Date(currentDate);
+    nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
+    const optionsNextMonth = { month: 'long' };
+    const formattedNextMonth = nextMonthDate.toLocaleDateString('en-US', optionsNextMonth);
+
+    // Construct date range string
+    const startDate = `16 ${formattedDate.split(' ')[1]}`;
+    const endDate = `15 ${formattedNextMonth}`;
+    const year = currentDate.getFullYear();
+    const dateRangeString = `${startDate} to ${endDate} ${year}`;
+
+    // Update date range
+    dynamicDateRangeElement.textContent = dateRangeString;
+}
+
+// Call the function to update date and date range when the page loads
+updateDateTime();
+
+// Update date and date range every second
+setInterval(updateDateTime, 1000);
+
+    </script>
+</body>
+
+</html>

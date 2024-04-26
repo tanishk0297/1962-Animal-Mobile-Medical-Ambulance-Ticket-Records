@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambulance Ticket Records</title>
+    <link rel="stylesheet" href="ticket.css">
+</head>
+
+<body>
+    <header>
+        <h1>1962: Animal Mobile Medical Ambulance Ticket Records</h1>
+        <h1></h1>
+        <nav>
+            <ul>
+                <li><a href="ticket.html">Ticket Records</a></li>
+                <li><a href="collection.html">Collection Records</a></li>
+                <li><a href="attendence.html">Attendance Records</a></li>
+                <li><a href=""></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="form-container">
+            <h2>Add New Ticket Record</h2>
+            <form id="new-record-form">
+                <div class="form-group">
+                    <label for="new-ticket">New Tickets:</label>
+                    <input type="number" id="new-ticket" name="new-ticket" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="attended-ticket">Attended Tickets:</label>
+                    <input type="number" id="attended-ticket" name="attended-ticket" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cancelled-ticket">Cancelled Tickets:</label>
+                    <input type="number" id="cancelled-ticket" name="cancelled-ticket" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="prev-pending-ticket">Previous Days Pending Tickets:</label>
+                    <input type="number" id="prev-pending-ticket" name="prev-pending-ticket" required>
+                </div>
+
+
+                <button type="submit">Add Record</button>
+            </form>
+        </section>
+
+        <section class="record-list">
+            <h2>Ticket Records</h2>
+            <ul id="ticket-list"></ul>
+            <button id="prev-page-btn">Prev</button>
+            <button id="next-page-btn">Next</button>
+        </section>
+    </main>
+    <script src="/airtable.browser.js"></script>
+    <script src="ticket.js"></script>
+
+</body>
+
+</html>

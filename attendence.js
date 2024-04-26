@@ -88,9 +88,9 @@ async function fetchAttendance() {
                 month: 'long', 
                 year: 'numeric' 
             }),
-            doctor: record.get('Doctor') === 1 ? 'P' : record.get('Doctor') === 0 ? 'A' :record.get('Doctor') === 0 ? 'CL' :'N/A',
-            assistant: record.get('Assistant') === 1 ? 'P' : record.get('Assistant') === 0 ? 'A' : 'CL',
-            driver: record.get('Driver') === 1 ? 'P' : record.get('Driver') === 0 ? 'A' : 'CL'
+            doctor: record.get('Doctor') === 1 ? 'P' : record.get('Doctor') === 0 ? 'A' :record.get('Doctor') === 9 ? 'CL' :'N/A',
+            assistant: record.get('Assistant') === 1 ? 'P' : record.get('Assistant') === 0 ? 'A' :record.get('Assistant') === 9 ? 'CL' :'N/A',
+            driver: record.get('Driver') === 1 ? 'P' : record.get('Driver') === 0 ? 'A' : record.get('Driver') === 9 ? 'CL' :'N/A',
         }));
 
         updatePageNavigation();

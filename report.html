@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Mobile Medical Ambulance Report</title>
+    <!-- Link to Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Link to your custom CSS file -->
+    <link rel="stylesheet" href="report.css">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2C3E50; /* Text color */
+        }
+
+        header {
+            background-color: #2C3E50; /* Header background color */
+            color: white; /* Header text color */
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        button {
+            background-color: #2C3E50; /* Button background color */
+            color: white; /* Button text color */
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #34495E; /* Button hover background color */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <header>
+        <h1 class="text-2xl md:text-3xl font-bold">1962: Animal Mobile Medical Ambulance Report</h1>
+        <h2 id="dynamic-date-range" class="text-base md:text-lg font-light mt-1"></h2>
+        <h1 id="dynamic-date" class="text-lg md:text-2xl font-semibold mt-4"></h1>
+    </header>
+
+    <main class="container mx-auto mt-8">
+        <form id="date-form" class="mb-4">
+            <label for="report-date" class="block mb-2">Select Date:</label>
+            <input type="date" id="report-date" name="report-date"
+                class="w-full md:w-auto border border-gray-300 rounded px-4 py-2 focus:outline-none focus:border-blue-500">
+            <button type="submit"
+                class="w-full md:w-auto bg-blue-500 text-white rounded px-4 py-2 mt-2 md:mt-0 md:ml-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit</button>
+        </form>
+
+        <section id="attendance-section" class="mb-8">
+            <h2 class="text-lg md:text-xl font-semibold mb-4">Attendance</h2>
+            <table class="w-full border-collapse border border-gray-300">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4">Vikas Khand</th>
+                        <th class="py-2 px-4">Doctor</th>
+                        <th class="py-2 px-4">Paravet</th>
+                        <th class="py-2 px-4">Driver</th>
+                    </tr>
+                </thead>
+                <tbody id="attendance-body">
+                    <!-- Attendance records will be dynamically populated here -->
+                </tbody>
+            </table>
+        </section>
+
+        <section id="ticket-detail-section" class="mb-8">
+            <h2 class="text-lg md:text-xl font-semibold mb-4">Ticket Detail</h2>
+            <table class="w-full border-collapse border border-gray-300">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4">Location</th>
+                        <th class="py-2 px-4">New Ticket</th>
+                        <th class="py-2 px-4">Prev Pending</th>
+                        <th class="py-2 px-4">Pending</th>
+                        <th class="py-2 px-4">Attended</th>
+                        <th class="py-2 px-4">Cancelled</th>
+                    </tr>
+                </thead>
+                <tbody id="ticket-detail-body">
+                    <!-- Ticket detail records will be dynamically populated here -->
+                </tbody>
+            </table>
+        </section>
+
+        <section id="collection-section">
+            <h2 class="text-lg md:text-xl font-semibold mb-4">Collection Summary</h2>
+            <table id="collection-table" class="w-full border-collapse border border-gray-300">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="py-2 px-4">Vikas Khand</th>
+                        <th class="py-2 px-4">General Animals</th>
+                        <th class="py-2 px-4">Dogs</th>
+                        <th class="py-2 px-4">Other Animals</th>
+                        <th class="py-2 px-4">Amount Collected</th>
+                        <th class="py-2 px-4">Amount to be Deposited</th>
+                    </tr>
+                </thead>
+                <tbody id="collection-body">
+                    <!-- Content for collection table will be dynamically populated here -->
+                </tbody>
+            </table>
+        </section>
+
+        <button id="print-btn"
+            class="w-full md:w-auto bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Print</button>
+    </main>
+
+    <!-- Your custom JavaScript file -->
+    <script src="/airtable.browser.js"></script>
+    <script src="report.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to update the date and date range
+            function updateDateTime(selectedDate) {
+                const currentDate = selectedDate ? new Date(selectedDate) : new Date();
+
+                // Update date
+                const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = currentDate.toLocaleDateString('en-US', optionsDate);
+                const splitDate = formattedDate.split(', '); // Splitting the date string
+                const finalDate = splitDate[0] + ' ' + splitDate[1]; // Combining the date parts without the comma
+                document.getElementById('dynamic-date').textContent = finalDate;
+
+                // Get next month
+                const nextMonthDate = new Date(currentDate);
+                nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
+                const optionsNextMonth = { month: 'long' };
+                const formattedNextMonth = nextMonthDate.toLocaleDateString('en-US', optionsNextMonth);
+
+                // Construct date range string
+                const startDate = `16 ${formattedDate.split(' ')[1]}`;
+                const endDate = `15 ${formattedNextMonth}`;
+                const year = currentDate.getFullYear();
+                const dateRangeString = `${startDate} to ${endDate} ${year}`;
+
+                // Update date range
+                document.getElementById('dynamic-date-range').textContent = dateRangeString;
+            }
+
+            // Call the function initially to update date and date range for current date
+            updateDateTime();
+
+            // Add event listener to the date form
+            document.getElementById('date-form').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent form submission
+                const selectedDate = document.getElementById('report-date').value;
+                updateDateTime(selectedDate);
+            });
+        });
+
+    </script>
+
+    <script>
+        document.getElementById('print-btn').addEventListener('click', function() {
+            window.print(); // Trigger browser's print functionality
+        });
+    </script>
+</body>
+
+</html>

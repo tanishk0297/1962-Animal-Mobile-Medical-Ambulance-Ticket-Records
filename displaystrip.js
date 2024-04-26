@@ -114,19 +114,19 @@
 
     // Function to format the records into a single line
     const vehicleDetails = {
-        "1": { number: "MP-02-ZA-0 104", location: "केसली" },
-        "2": { number: "MP-02-ZA-0 105", location: "मालथौन" },
-        "3": { number: "MP-02-ZA-0 106", location: "सागर 1" },
-        "4": { number: "MP-02-ZA-0 107", location: "रहली" },
-        "5": { number: "MP-02-ZA-0 108", location: "देवरी" },
-        "6": { number: "MP-02-ZA-0 109", location: "जैसीनगर" },
-        "7": { number: "MP-02-ZA-0 110", location: "खुरई" },
-        "8": { number: "MP-02-ZA-0 111", location: "वण्‍डा" },
-        "9": { number: "MP-02-ZA-0 112", location: "शाहगढ" },
-        "10": { number: "MP-02-ZA-0 113", location: "सागर 2" },
-        "11": { number: "MP-02-ZA-0 114", location: "सागर HQ" },
-        "12": { number: "MP-02-ZA-0 115", location: "बीना" },
-        "13": { number: "MP-02-ZA-0 116", location: "राहतगढ" }
+        "1": { number: "MP-02-ZA-0104", location: "केसली" },
+        "2": { number: "MP-02-ZA-0156", location: "मालथौन" },
+        "3": { number: "MP-02-ZA-0142", location: "सागर 1" },
+        "4": { number: "MP-02-ZA-0125", location: "रहली" },
+        "5": { number: "MP-02-ZA-0140", location: "देवरी" },
+        "6": { number: "MP-02-ZA-0126", location: "जैसीनगर" },
+        "7": { number: "MP-02-ZA-0151", location: "खुरई" },
+        "8": { number: "MP-02-ZA-0146", location: "वण्‍डा" },
+        "9": { number: "MP-02-ZA-0186", location: "शाहगढ" },
+        "10": { number: "MP-02-ZA-0139", location: "सागर 2" },
+        "11": { number: "MP-02-ZA-0199", location: "सागर HQ" },
+        "12": { number: "MP-02-ZA-0192", location: "बीना" },
+        "13": { number: "MP-02-ZA-0159", location: "राहतगढ" }
         // Add more options as needed
     };
     

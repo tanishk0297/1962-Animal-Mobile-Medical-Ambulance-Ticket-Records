@@ -8,16 +8,24 @@ function displayAttendance(records) {
     const attendanceBody = document.getElementById('attendance-body');
     attendanceBody.innerHTML = ''; // Clear existing content
 
-    records.forEach(record => {
+    if (records.length === 0) {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${record.date}</td>
-            <td style="color: ${getColor(record.doctor)}">${record.doctor}</td>
-            <td style="color: ${getColor(record.assistant)}">${record.assistant}</td>
-            <td style="color: ${getColor(record.driver)}">${record.driver}</td>
+            <td colspan="4">N/A</td>
         `;
         attendanceBody.appendChild(row);
-    });
+    } else {
+        records.forEach(record => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${record.date}</td>
+                <td style="color: ${getColor(record.doctor)}">${record.doctor}</td>
+                <td style="color: ${getColor(record.assistant)}">${record.assistant}</td>
+                <td style="color: ${getColor(record.driver)}">${record.driver}</td>
+            `;
+            attendanceBody.appendChild(row);
+        });
+    }
 }
 
 function getColor(status) {
@@ -65,9 +73,12 @@ function prevPage() {
 
 async function fetchAttendance() {
     try {
+        const selectedCarNumber = document.getElementById('car-number-selector').value;
+
         const records = await base('Attendance').select({
             maxRecords: 10000, // Adjust as needed
-            sort: [{ field: "Uid", direction: "desc" }]
+            sort: [{ field: "Uid", direction: "desc" }],
+            filterByFormula: `{Car Number} = '${selectedCarNumber}'` // Filter by selected car number
         }).firstPage();
 
         attendanceRecords = records.map(record => ({
@@ -77,7 +88,7 @@ async function fetchAttendance() {
                 month: 'long', 
                 year: 'numeric' 
             }),
-            doctor: record.get('Doctor') === 1 ? 'P' : record.get('Doctor') === 0 ? 'A' : 'CL',
+            doctor: record.get('Doctor') === 1 ? 'P' : record.get('Doctor') === 0 ? 'A' :record.get('Doctor') === 0 ? 'CL' :'N/A',
             assistant: record.get('Assistant') === 1 ? 'P' : record.get('Assistant') === 0 ? 'A' : 'CL',
             driver: record.get('Driver') === 1 ? 'P' : record.get('Driver') === 0 ? 'A' : 'CL'
         }));
@@ -87,10 +98,11 @@ async function fetchAttendance() {
         const startIndex = currentPageIndex * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const initialRecords = attendanceRecords.slice(startIndex, endIndex);
+        
         if (initialRecords.length > 0) {
             displayAttendance(initialRecords);
         } else {
-            displayNoRecordsBanner();
+            displayAttendance([{ date: 'N/A', doctor: 'N/A', assistant: 'N/A', driver: 'N/A' }]);
         }
 
         console.log('Attendance records fetched successfully!');
@@ -100,16 +112,20 @@ async function fetchAttendance() {
     }
 }
 
-async function addAttendance(doctorStatus, assistantStatus, driverStatus) {
+
+
+async function addAttendance(doctorStatus, assistantStatus, driverStatus, carNumber) {
     try {
         const doctorValue = doctorStatus === 'present' ? 1 : doctorStatus === 'leave' ? 9 : 0;
         const assistantValue = assistantStatus === 'present' ? 1 : assistantStatus === 'leave' ? 9 : 0;
         const driverValue = driverStatus === 'present' ? 1 : driverStatus === 'leave' ? 9 : 0;
 
+        const date = new Date().toISOString(); // Current date and time in ISO format
         await base('Attendance').create({
             "Doctor": doctorValue,
             "Assistant": assistantValue,
-            "Driver": driverValue
+            "Driver": driverValue,
+            "Car Number": carNumber // Include carNumber in the new record
         });
 
         // Reload the page after adding attendance
@@ -120,25 +136,30 @@ async function addAttendance(doctorStatus, assistantStatus, driverStatus) {
     }
 }
 
-async function submitAttendance() {
-    const doctorStatus = document.getElementById('doctor').value;
-    const assistantStatus = document.getElementById('assistant').value;
-    const driverStatus = document.getElementById('driver').value;
-    
-    try {
-        await addAttendance(doctorStatus, assistantStatus, driverStatus);
-    } catch (error) {
-        console.error('Error submitting attendance:', error);
-        alert('Error submitting attendance. Please try again.');
-    }
-}
+
 
 // Event listeners for pagination buttons
 document.getElementById('prev-btn').addEventListener('click', prevPage);
 document.getElementById('next-btn').addEventListener('click', nextPage);
 
 // Event listener for the Submit Attendance button
-document.getElementById('submit-attendance-btn').addEventListener('click', submitAttendance);
+
+// Event listener for car number selector
+document.getElementById('car-number-selector').addEventListener('change', async function() {
+    await fetchAttendance(); // Fetch attendance records based on the newly selected car number
+});
+
+document.getElementById('attendance-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const doctorStatus = document.getElementById('doctor').value;
+    const assistantStatus = document.getElementById('assistant').value;
+    const driverStatus = document.getElementById('driver').value;
+    const carNumber = parseInt(document.getElementById('car-number-selector').value);
+
+    await addAttendance(doctorStatus, assistantStatus, driverStatus, carNumber);
+    await fetchAttendance(); // Fetch the latest attendance records based on selected car number and update the display
+});
+
 
 // Initial fetch of attendance records when the page loads
 window.onload = async function() {

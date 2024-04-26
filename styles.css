@@ -100,3 +100,10 @@ li {
 @media only screen and (max-width: 768px) {
     /* Add responsive styles here */
 }
+
+select {
+    width: 10%; /* Set width to 100% */
+    padding: 8px; /* Add padding */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 4px; /* Add border radius */
+}

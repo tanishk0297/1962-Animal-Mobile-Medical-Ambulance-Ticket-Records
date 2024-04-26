@@ -23,6 +23,24 @@
         <h2 id="heading">Attendance</h2>
         <form id="attendance-form">
             <div class="form-group">
+                <label for="car-number">Select Car Number:</label>
+                <select id="car-number-selector" name="car-number-selector" required>
+                    <option value="1">Car 1</option>
+                    <option value="2">Car 2</option>
+                    <option value="3">Car 3</option>
+                    <option value="4">Car 4</option>
+                    <option value="5">Car 5</option>
+                    <option value="6">Car 6</option>
+                    <option value="7">Car 7</option>
+                    <option value="8">Car 8</option>
+                    <option value="9">Car 9</option>
+                    <option value="10">Car 10</option>
+                    <option value="11">Car 11</option>
+                    <option value="12">Car 12</option>
+                    <option value="13">Car 13</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="doctor">Doctor:</label>
                 <select id="doctor" name="doctor">
                     <option value="present">Present</option>
@@ -46,7 +64,7 @@
                     <option value="leave">Leave</option>
                 </select>
             </div>            
-            <button type="button" id="submit-attendance-btn">Submit Attendance</button>
+            <button type="submit">Add Record</button>
         </form>
     </div>
 
@@ -57,7 +75,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Doctor</th>
-                    <th>Assist</th>
+                    <th>Assistant</th>
                     <th>Driver</th>
                 </tr>
             </thead>

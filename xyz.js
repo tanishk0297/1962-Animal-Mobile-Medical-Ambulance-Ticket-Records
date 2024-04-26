@@ -1,14 +1,12 @@
 const Airtable = require('airtable');
 const base = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
 
-
-
-async function fetchLatestTicketRecord(selectedCarNumber) {
+// Fetch latest ticket record and populate ticket summary
+async function fetchLatestTicketRecord() {
     try {
         const records = await base('Ticket Detail').select({
             maxRecords: 1,
-            sort: [{ field: "Uid", direction: "desc" }],
-            filterByFormula: `{Car Number} = '${selectedCarNumber}'` // Filter by the selected car number
+            sort: [{ field: "Uid", direction: "desc" }]
         }).firstPage();
 
         const ticketSummary = document.getElementById('ticket-summary');
@@ -48,12 +46,12 @@ async function fetchLatestTicketRecord(selectedCarNumber) {
     }
 }
 
-async function fetchLatestCollectionRecord(selectedCarNumber) {
+// Fetch latest collection record and populate collection summary
+async function fetchLatestCollectionRecord() {
     try {
         const records = await base('Collection').select({
             maxRecords: 1,
-            sort: [{ field: "Uid", direction: "desc" }],
-            filterByFormula: `{Car Number} = '${selectedCarNumber}'` // Filter by the selected car number
+            sort: [{ field: "Uid", direction: "desc" }]
         }).firstPage();
 
         const collectionSummary = document.getElementById('collection-summary');
@@ -93,21 +91,12 @@ async function fetchLatestCollectionRecord(selectedCarNumber) {
     }
 }
 
+// Function to create a list item with the specified label and value
 function createListItem(label, value) {
     const listItem = document.createElement('li');
     listItem.textContent = `${label}: ${value}`;
     return listItem;
 }
-
-// Event listener for the car number selector
-document.getElementById('car-number-selector').addEventListener('change', async function(event) {
-    const selectedCarNumber = event.target.value;
-    await fetchRecordsForCar(selectedCarNumber);
-});
-window.onload = async function() {
-    const defaultCarNumber = document.getElementById('car-number-selector').value;
-    await fetchRecordsForCar(defaultCarNumber);
-};
 
 let currentPageIndex = 0;
 const itemsPerPage = 7; // Display 7 items per page
@@ -195,12 +184,11 @@ function prevPage() {
     updatePageNavigation();
 }
 
-async function fetchAttendance(selectedCarNumber) {
+async function fetchAttendance() {
     try {
         const records = await base('Attendance').select({
             maxRecords: 10000, // Adjust as needed
-            sort: [{ field: "Uid", direction: "desc" }],
-            filterByFormula: `{Car Number} = '${selectedCarNumber}'` // Filter by the selected car number
+            sort: [{ field: "Uid", direction: "desc" }]
         }).firstPage();
 
         attendanceRecords = records.map(record => ({
@@ -223,23 +211,29 @@ async function fetchAttendance(selectedCarNumber) {
         if (initialRecords.length > 0) {
             displayAttendance(initialRecords);
         } else {
-            displayNoRecordsBanner(); // Display "N/A" if no records are available
+            displayNoRecordsBanner();
         }
 
         console.log('Attendance records fetched successfully!');
     } catch (err) {
         console.error('Error fetching attendance records:', err);
-        displayNoRecordsBanner(); // Display "N/A" if there is an error fetching records
+        displayNoRecordsBanner(); // Display the no records banner in case of an error
     }
 }
 
 function displayNoRecordsBanner() {
-    const attendanceTable = document.getElementById('attendance-table');
-    attendanceTable.innerHTML = '<tr><td colspan="4">N/A</td></tr>'; // Display "N/A" in a row if no records are available
+    // Implement this function if needed
+    console.log('No records found.');
 }
 
 document.getElementById('prev-btn').addEventListener('click', prevPage);
 document.getElementById('next-btn').addEventListener('click', nextPage);
+
+// Call the functions to fetch and populate records when the page loads
+window.onload = async function() {
+    // Fetch records concurrently
+    await Promise.all([fetchLatestTicketRecord(), fetchLatestCollectionRecord(), fetchAttendance()]);
+};
 
 function adjustTableForMobile() {
     const attendanceTable = document.getElementById('attendance-table');
@@ -271,13 +265,3 @@ function adjustTableForMobile() {
 
 // Call adjustTableForMobile() function whenever the window is resized
 window.addEventListener('resize', adjustTableForMobile);
-
-async function fetchRecordsForCar(selectedCarNumber) {
-    // Call the function to fetch ticket records for the selected car number
-    await fetchLatestTicketRecord(selectedCarNumber);
-    // Call the function to fetch collection records for the selected car number
-    await fetchLatestCollectionRecord(selectedCarNumber);
-    // Call the function to fetch attendance records for the selected car number
-    await fetchAttendance(selectedCarNumber);
-    // You can add similar function calls for fetching other records if needed
-}

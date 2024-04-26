@@ -213,3 +213,9 @@ nav ul li a:hover {
         padding: 8px 16px; /* Reduce padding to conserve space */
     }
 }
+select {
+    width: 100%; /* Set width to 100% */
+    padding: 8px; /* Add padding */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 4px; /* Add border radius */
+}

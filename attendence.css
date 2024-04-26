@@ -63,6 +63,14 @@ nav ul li a:hover {
     font-size: 24px; /* Set font size */
     margin-top: 0; /* Remove top margin */
 }
+#attendance-heading {
+    color: #333; /* Set text color */
+    font-size: 24px; /* Set font size */
+    margin-top: 0; /* Remove top margin */
+    width: 100%; /* Set width to 100% */
+    text-align: center; /* Center align text */
+    display: block; /* Change display to block */
+}
 
 .form-group {
     margin-bottom: 20px; /* Add margin bottom */

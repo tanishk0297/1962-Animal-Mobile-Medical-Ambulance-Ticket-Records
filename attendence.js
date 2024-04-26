@@ -121,10 +121,10 @@ async function addAttendance(doctorStatus, assistantStatus, driverStatus) {
 }
 
 async function submitAttendance() {
-    const doctorStatus = document.querySelector('input[name="doctor"]:checked').value;
-    const assistantStatus = document.querySelector('input[name="assistant"]:checked').value;
-    const driverStatus = document.querySelector('input[name="driver"]:checked').value;
-
+    const doctorStatus = document.getElementById('doctor').value;
+    const assistantStatus = document.getElementById('assistant').value;
+    const driverStatus = document.getElementById('driver').value;
+    
     try {
         await addAttendance(doctorStatus, assistantStatus, driverStatus);
     } catch (error) {

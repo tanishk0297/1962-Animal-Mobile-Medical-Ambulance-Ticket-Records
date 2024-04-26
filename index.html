@@ -11,6 +11,8 @@
         <h1>1962: Animal Mobile Medical Ambulance Ticket Records</h1>
         <h2 id="dynamic-date-range"></h2>
         <h1 id="dynamic-date"></h1>
+        <button id="print-btn" onclick="goToWebsite()">View Full Report</button>
+      
     </header>
     
     <main>
@@ -40,6 +42,7 @@
                 <option value="13">13. MP-02-ZA-0159 (राहतगढ)</option>
             </select>
             <button id="print-btn">Print or Save as PDF</button>
+           
 
         </div>
     </section>
@@ -219,7 +222,11 @@ setInterval(updateDateTime, 1000);
             }
         });
     </script>
-    
+    <script>
+        function goToWebsite() {
+          window.location.href = "https://1962.vercel.app/report.html";
+        }
+      </script>
 </body>
 
 </html>

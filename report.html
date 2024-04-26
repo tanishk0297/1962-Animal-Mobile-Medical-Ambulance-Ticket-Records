@@ -163,11 +163,19 @@
 
     </script>
 
-    <script>
-        document.getElementById('print-btn').addEventListener('click', function() {
-            window.print(); // Trigger browser's print functionality
-        });
-    </script>
+<script>
+    document.getElementById('print-btn').addEventListener('click', function() {
+        // Add a class to the body to enable printing styles
+        document.body.classList.add('printing');
+
+        // Trigger browser's print functionality
+        window.print();
+
+        // Remove the class after printing is done to revert to normal styles
+        document.body.classList.remove('printing');
+    });
+</script>
+
 </body>
 
 </html>

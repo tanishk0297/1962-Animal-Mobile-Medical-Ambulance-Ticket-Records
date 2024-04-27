@@ -27,6 +27,7 @@ async function fetchLatestTicketRecord(selectedCarNumber) {
             const attendedTickets = createListItem('Attended Tickets', latestRecord.get('Attended Ticket'));
             const cancelledTickets = createListItem('Cancelled Tickets', latestRecord.get('Cancelled Ticket'));
             const pendingTickets = createListItem('Pending Tickets', latestRecord.get('Pending Ticket'));
+            const comments = createListItem('Comments', latestRecord.get('Comments') || 'No comments'); // If no comments found, display "No comments"
 
             // Append list items to the ticket summary
             ticketSummary.appendChild(dateItem);
@@ -35,9 +36,10 @@ async function fetchLatestTicketRecord(selectedCarNumber) {
             ticketSummary.appendChild(attendedTickets);
             ticketSummary.appendChild(cancelledTickets);
             ticketSummary.appendChild(pendingTickets);
+            ticketSummary.appendChild(comments);
         } else {
             // Display 0 for each summary item if no records are found
-            const items = ['Date', 'Prev Pending Tickets', 'New Ticket', 'Attended Tickets', 'Cancelled Tickets', 'Pending Tickets'];
+            const items = ['Date', 'Prev Pending Tickets', 'New Ticket', 'Attended Tickets', 'Cancelled Tickets', 'Pending Tickets', 'Comments'];
             items.forEach(item => {
                 const listItem = createListItem(item, 0);
                 ticketSummary.appendChild(listItem);
@@ -47,6 +49,7 @@ async function fetchLatestTicketRecord(selectedCarNumber) {
         console.error('Error fetching latest ticket record:', err);
     }
 }
+
 
 async function fetchLatestCollectionRecord(selectedCarNumber) {
     try {

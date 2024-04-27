@@ -5,7 +5,7 @@ let currentPageIndex = 0;
 const itemsPerPage = 4;
 let reversedRecords = [];
 
-async function addNewRecord(newTicket, attendedTicket, cancelledTicket, carNumber, date) {
+async function addNewRecord(newTicket, attendedTicket, cancelledTicket, carNumber, date, comments) {
     try {
         // Fetch the latest record for the selected car category
         const latestRecord = await base('Ticket Detail').select({
@@ -32,7 +32,8 @@ async function addNewRecord(newTicket, attendedTicket, cancelledTicket, carNumbe
             "Cancelled Ticket": cancelledTicket,
             "Pending Ticket": pendingTicket,
             "Car Number": carNumber,
-            "Date": date
+            "Date": date,
+            "Comments": comments
         });
 
         console.log('New record created successfully!');
@@ -48,10 +49,11 @@ document.getElementById('new-record-form').addEventListener('submit', async func
     const attendedTicket = parseInt(document.getElementById('attended-ticket').value);
     const cancelledTicket = parseInt(document.getElementById('cancelled-ticket').value);
     const carNumber = parseInt(document.getElementById('car-number').value);
+    const comments = parseInt(document.getElementById('comments').value);
     const date = new Date().toISOString().split('T')[0];
 
     // Call the function to add a new record
-    await addNewRecord(newTicket, attendedTicket, cancelledTicket, carNumber, date);
+    await addNewRecord(newTicket, attendedTicket, cancelledTicket, carNumber, date,comments);
 
     // Fetch the latest records and update the form fields
     await fetchRecordsForCar(carNumber);
@@ -157,6 +159,8 @@ function displayRecords(records, startIndex, endIndex) {
         const attendedTicket = record.get('Attended Ticket');
         const cancelledTicket = record.get('Cancelled Ticket');
         const carNumber = record.get('Car Number'); // Retrieve car number
+        const comments = record.get('Comments') || 'No comments'; // Retrieve comments as string
+        // Retrieve car number
 
         const listItem = document.createElement('li');
         listItem.classList.add('ticket-item');
@@ -213,6 +217,10 @@ function displayRecords(records, startIndex, endIndex) {
         carNumberValue.classList.add('ticket-value-car-number');
         listItem.appendChild(carNumberValue);
 
+        const commentValue = document.createElement("span");
+    commentValue.textContent = ` Comments: ${comments}`; // Display comments
+    commentValue.classList.add("ticket-value-comment");
+    listItem.appendChild(commentValue);
 
         ticketList.appendChild(listItem);
     }
@@ -276,10 +284,12 @@ document.getElementById('new-record-form').addEventListener('submit', async func
     const attendedTicket = parseInt(document.getElementById('attended-ticket').value);
     const cancelledTicket = parseInt(document.getElementById('cancelled-ticket').value);
     const carNumber = parseInt(document.getElementById('car-number-selector').value); // Retrieve car number
+    const comments = document.getElementById('comments').value; // Retrieve comments as string
+ // Retrieve car number
     const date = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
 
     // Call the function to add a new record
-    await addNewRecord(newTicket, attendedTicket, cancelledTicket, carNumber, date);
+    await addNewRecord(newTicket, attendedTicket, cancelledTicket, carNumber, date, comments);
 
     // Fetch the latest records and update the pending ticket field
     await fetchRecordsForCar(carNumber);

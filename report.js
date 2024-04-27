@@ -92,6 +92,7 @@ function displayTicketDetails(records) {
                 <td>${record.get('Pending Ticket')}</td>
                 <td>${record.get('Attended Ticket')}</td>
                 <td>${record.get('Cancelled Ticket')}</td>
+                <td>${record.get('Comments')||'No Comments'}</td>
             `;
             ticketDetailBody.appendChild(row);
         });

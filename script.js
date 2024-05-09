@@ -163,6 +163,10 @@ function getColor(status) {
             return 'red';
         case 'CL':
             return 'gold';
+        case 'WO':
+            return 'grey';
+        case 'LH':
+            return '#AD88C6';
         default:
             return 'black'; // Default color
     }
@@ -213,9 +217,9 @@ async function fetchAttendance(selectedCarNumber) {
                 month: 'long', 
                 year: 'numeric' 
             }),
-            doctor: record.get('Doctor') === 1 ? 'P' : record.get('Doctor') === 0 ? 'A' : 'CL',
-            assistant: record.get('Assistant') === 1 ? 'P' : record.get('Assistant') === 0 ? 'A' : 'CL',
-            driver: record.get('Driver') === 1 ? 'P' : record.get('Driver') === 0 ? 'A' : 'CL'
+            doctor: record.get('Doctor') === 1 ? 'P' : record.get('Doctor') === 0 ? 'A' :record.get('Doctor') === 9 ? 'CL' :record.get('Doctor') === 2 ? 'WO':record.get('Doctor') === 3 ? 'LH':'N/A',
+            assistant: record.get('Assistant') === 1 ? 'P' : record.get('Assistant') === 0 ? 'A' :record.get('Assistant') === 9 ? 'CL' :record.get('Assistant') === 2 ? 'WO':record.get('Assistant') === 3 ? 'LH' :'N/A',
+            driver: record.get('Driver') === 1 ? 'P' : record.get('Driver') === 0 ? 'A' : record.get('Driver') === 9 ? 'CL': record.get('Driver') === 2 ? 'WO': record.get('Driver') === 3 ? 'LH' :'N/A',
         }));
 
         updatePageNavigation();

@@ -133,6 +133,10 @@ function getColor(status) {
             return 'red';
         case 'CL':
             return 'gold';
+        case 'WO':
+            return 'grey';
+        case 'LH':
+            return '#AD88C6';
         default:
             return 'black'; // Default color
     }
@@ -145,6 +149,10 @@ function getAttendanceStatus(status) {
             return 'P';
         case 0:
             return 'A';
+        case 2:
+            return 'WO';
+        case 3:
+            return 'LH';
         case 9:
             return 'CL';
         default:

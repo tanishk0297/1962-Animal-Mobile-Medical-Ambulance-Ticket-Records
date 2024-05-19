@@ -1,17 +1,85 @@
+/* Custom styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2C3E50; /* Text color */
+    margin: 0; /* Remove default body margin */
+    padding: 0; /* Remove default body padding */
+}
+
+header {
+    background-color: #2C3E50; /* Header background color */
+    color: white; /* Header text color */
+    padding: 10px; /* Reduce header padding */
+    text-align: center;
+}
+
+main {
+    padding: 10px; /* Reduce main padding */
+}
+
+button {
+    background-color: #2C3E50; /* Button background color */
+    color: white; /* Button text color */
+    border: none;
+    padding: 8px 16px; /* Reduce button padding */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #34495E; /* Button hover background color */
+}
+
 /* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 30px;
+    margin-top: 10px; /* Reduce table margin */
+    table-layout: fixed; /* Ensures table takes up the full width */
 }
 
 th, td {
-    padding: 12px;
+    padding: 8px; /* Reduce table cell padding */
     text-align: center;
     border-bottom: 1px solid #ddd;
+    word-wrap: break-word; /* Ensures content wraps within the cell */
 }
 
 th {
     background-color: #2c3e50;
     color: #fff;
+}
+
+/* Printing styles */
+@media print {
+    body.printing * {
+        visibility: hidden;
+    }
+    
+    body.printing main, body.printing main * {
+        visibility: visible;
+    }
+
+    main {
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        page-break-inside: avoid; /* Prevent table rows from being split across pages */
+    }
+}
+
+/* Custom styles for the comments table */
+#comments-section table {
+    table-layout: auto; /* Allow table cells to expand based on content */
+}
+
+#comments-section th:nth-child(2),
+#comments-section td:nth-child(2) {
+    width: 100%; /* Adjust the width of the comments column */
+    word-wrap: break-word; /* Allow long comments to wrap within cells */
+    font-size: 10px; /* Reduce font size for comments */
+    line-height: 1.2; /* Adjust the line height for better readability */
 }

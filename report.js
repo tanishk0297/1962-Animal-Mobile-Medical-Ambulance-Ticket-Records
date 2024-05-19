@@ -92,9 +92,31 @@ function displayTicketDetails(records) {
                 <td>${record.get('Pending Ticket')}</td>
                 <td>${record.get('Attended Ticket')}</td>
                 <td>${record.get('Cancelled Ticket')}</td>
-                <td>${record.get('Comments')||'No Comments'}</td>
             `;
             ticketDetailBody.appendChild(row);
+        });
+    }
+}
+
+// Function to display comments records in the separate comments table
+function displayComments(records) {
+    const commentsBody = document.getElementById('comments-body');
+    commentsBody.innerHTML = ''; // Clear existing content
+
+    if (records.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="2">No comments found for the selected date</td>`;
+        commentsBody.appendChild(row);
+    } else {
+        records.forEach(record => {
+            const row = document.createElement('tr');
+            const carNumber = record.get('Car Number');
+            const carDetails = vehicleDetails[carNumber] || { number: 'N/A', location: 'N/A' };
+            row.innerHTML = `
+                <td>${carDetails.location}</td>
+                <td>${record.get('Comments') || 'No Comments'}</td>
+            `;
+            commentsBody.appendChild(row);
         });
     }
 }
@@ -176,6 +198,7 @@ document.getElementById('date-form').addEventListener('submit', async function(e
     displayAttendance(attendanceRecords); // Display attendance records in the table
     displayCollection(collectionRecords); // Display collection records in the table
     displayTicketDetails(ticketRecords); // Display ticket detail records in the table
+    displayComments(ticketRecords); // Display comments in the separate comments table
 });
 
 // Function to display collection records in the table
@@ -185,7 +208,7 @@ function displayCollection(records) {
 
     if (records.length === 0) {
         const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="7">No collection records found for the selected date</td>`;
+        row.innerHTML = `<td colspan="6">No collection records found for the selected date</td>`;
         collectionBody.appendChild(row);
     } else {
         records.forEach(record => {

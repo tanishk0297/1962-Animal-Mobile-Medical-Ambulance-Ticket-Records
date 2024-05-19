@@ -52,7 +52,26 @@ th {
 }
 
 /* Printing styles */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact; /* WebKit/Blink browsers */
+        color-adjust: exact; /* Firefox */
+    }
 
+    header {
+        background-color: #2C3E50; /* Ensure header background color remains */
+        color: white; /* Ensure header text color remains */
+    }
+
+    th {
+        background-color: #2c3e50; /* Ensure table header background color remains */
+        color: #fff; /* Ensure table header text color remains */
+    }
+
+    button {
+        display: none; /* Hide buttons when printing */
+    }
+}
 
 /* Custom styles for the comments table */
 #comments-section table {

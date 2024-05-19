@@ -52,24 +52,7 @@ th {
 }
 
 /* Printing styles */
-@media print {
-    body.printing * {
-        visibility: hidden;
-    }
-    
-    body.printing main, body.printing main * {
-        visibility: visible;
-    }
 
-    main {
-        margin: 0;
-        padding: 0;
-    }
-
-    table {
-        page-break-inside: avoid; /* Prevent table rows from being split across pages */
-    }
-}
 
 /* Custom styles for the comments table */
 #comments-section table {

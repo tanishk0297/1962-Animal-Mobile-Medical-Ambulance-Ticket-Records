@@ -1,5 +1,7 @@
 const Airtable = require('airtable');
-const base = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
+
+const base1 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
+const base2 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appCdJED3BCxjGlB4');
 
 const vehicleDetails = {
     "1": { number: "MP-02-ZA-0104", location: "केसली" },
@@ -26,8 +28,16 @@ function getCurrentDate() {
     return `${year}-${month}-${day}`;
 }
 
+function getBase(selectedDate) {
+    const cutoffDate = new Date('2024-06-01');
+    const date = new Date(selectedDate);
+
+    return date < cutoffDate ? base1 : base2;
+}
+
 async function fetchAttendance(selectedDate) {
     try {
+        const base = getBase(selectedDate);
         const records = await base('Attendance').select({
             maxRecords: 10000, // Adjust as needed
             sort: [{ field: "Uid", direction: "desc" }],
@@ -43,6 +53,7 @@ async function fetchAttendance(selectedDate) {
 
 async function fetchCollection(selectedDate) {
     try {
+        const base = getBase(selectedDate);
         const records = await base('Collection').select({
             maxRecords: 10000, // Adjust as needed
             sort: [{ field: "Uid", direction: "desc" }],
@@ -58,6 +69,7 @@ async function fetchCollection(selectedDate) {
 
 async function fetchTicketDetails(selectedDate) {
     try {
+        const base = getBase(selectedDate);
         const records = await base('Ticket Detail').select({
             maxRecords: 10000, // Adjust as needed
             sort: [{ field: "Uid", direction: "desc" }],
@@ -78,14 +90,16 @@ function displayTicketDetails(records) {
 
     if (records.length === 0) {
         const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="6">No ticket detail records found for the selected date</td>`;
+        row.innerHTML = `<td colspan="7">No ticket detail records found for the selected date</td>`;
         ticketDetailBody.appendChild(row);
     } else {
+        let counter = 1;
         records.forEach(record => {
             const row = document.createElement('tr');
             const carNumber = record.get('Car Number');
             const carDetails = vehicleDetails[carNumber] || { number: 'N/A', location: 'N/A' };
             row.innerHTML = `
+                <td>${counter++}</td>
                 <td>${carDetails.location}</td>
                 <td>${record.get('New Ticket')}</td>
                 <td>${record.get('Prev Days Pending Ticket')}</td>
@@ -97,6 +111,7 @@ function displayTicketDetails(records) {
         });
     }
 }
+
 
 // Function to display comments records in the separate comments table
 function displayComments(records) {
@@ -128,14 +143,16 @@ function displayAttendance(records) {
 
     if (records.length === 0) {
         const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="4">No records found for the selected date</td>`;
+        row.innerHTML = `<td colspan="5">No records found for the selected date</td>`;
         attendanceBody.appendChild(row);
     } else {
+        let counter = 1;
         records.forEach(record => {
             const row = document.createElement('tr');
             const carNumber = record.get('Car Number');
             const carDetails = vehicleDetails[carNumber] || { number: 'N/A', location: 'N/A' };
             row.innerHTML = `
+                <td>${counter++}</td>
                 <td>${carDetails.location}</td>
                 <td style="color: ${getColor(record.get('Doctor'))}">${getAttendanceStatus(record.get('Doctor'))}</td>
                 <td style="color: ${getColor(record.get('Assistant'))}">${getAttendanceStatus(record.get('Assistant'))}</td>
@@ -145,6 +162,7 @@ function displayAttendance(records) {
         });
     }
 }
+
 
 // Function to get color based on attendance status
 function getColor(status) {
@@ -208,14 +226,16 @@ function displayCollection(records) {
 
     if (records.length === 0) {
         const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="6">No collection records found for the selected date</td>`;
+        row.innerHTML = `<td colspan="7">No collection records found for the selected date</td>`;
         collectionBody.appendChild(row);
     } else {
+        let counter = 1;
         records.forEach(record => {
             const row = document.createElement('tr');
             const carNumber = record.get('Car Number');
             const carDetails = vehicleDetails[carNumber] || { number: 'N/A', location: 'N/A' };
             row.innerHTML = `
+                <td>${counter++}</td>
                 <td>${carDetails.location}</td>
                 <td>${record.get('General Animals')}</td>
                 <td>${record.get('Dogs')}</td>
@@ -227,3 +247,4 @@ function displayCollection(records) {
         });
     }
 }
+

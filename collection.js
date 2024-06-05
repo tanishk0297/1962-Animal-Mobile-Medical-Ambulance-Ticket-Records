@@ -1,22 +1,86 @@
 const Airtable = require('airtable');
-const base = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appCdJED3BCxjGlB4');
+const base1 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
+const base2 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appCdJED3BCxjGlB4');
 
 let currentPageIndex = 0;
 const itemsPerPage = 1; // Display only one item at a time
 let reversedRecords = [];
+let isLoading = false;
+
+// Function to get custom month range
+function getCustomMonthRange(currentDate) {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    let startDate, endDate;
+
+    if (currentDate.getDate() >= 16) {
+        startDate = new Date(year, month, 16);
+        endDate = new Date(year, month + 1, 15);
+    } else {
+        startDate = new Date(year, month - 1, 16);
+        endDate = new Date(year, month, 15);
+    }
+
+    return { startDate, endDate };
+}
+
+// Function to fetch records based on selected car number from base1
+async function fetchRecordsFromBase1(selectedCarNumber, startDate, endDate) {
+    try {
+        const filterFormula = generateFilterFormula(selectedCarNumber, startDate, endDate);
+        const records = await base1('Collection').select({
+            maxRecords: 10000,
+            view: 'Grid view',
+            filterByFormula: filterFormula
+        }).firstPage();
+        return records.reverse(); // Reverse the array of records
+    } catch (err) {
+        console.error('Error fetching Collection records from base1:', err);
+        return []; // Return an empty array in case of an error
+    }
+}
+
+// Function to fetch records based on selected car number from base2
+async function fetchRecordsFromBase2(selectedCarNumber, startDate, endDate) {
+    try {
+        const filterFormula = generateFilterFormula(selectedCarNumber, startDate, endDate);
+        const records = await base2('Collection').select({
+            maxRecords: 10000,
+            view: 'Grid view',
+            filterByFormula: filterFormula
+        }).firstPage();
+        return records.reverse(); // Reverse the array of records
+    } catch (err) {
+        console.error('Error fetching Collection records from base2:', err);
+        return []; // Return an empty array in case of an error
+    }
+}
+
+function generateFilterFormula(selectedCarNumber, startDate, endDate) {
+    return `AND(
+        {Car Number} = '${selectedCarNumber}',
+        IS_AFTER({Date}, '${startDate.toISOString()}'),
+        IS_BEFORE({Date}, '${endDate.toISOString()}')
+    )`;
+}
 
 // Function to fetch records based on selected car number
 async function fetchRecords() {
     try {
+        showLoadingIndicator(true);
+        
         const selectedCarNumber = document.getElementById('car-number-selector').value;
-        const records = await base('Collection').select({
-            maxRecords: 10000,
-            view: 'Grid view',
-            filterByFormula: `{Car Number} = '${selectedCarNumber}'`
-        }).firstPage();
+        const currentDate = new Date();
+        const { startDate, endDate } = getCustomMonthRange(currentDate);
 
-        reversedRecords = records.reverse(); // Reverse the array of records
+        const recordsFromBase1 = await fetchRecordsFromBase1(selectedCarNumber, startDate, endDate);
+        const recordsFromBase2 = await fetchRecordsFromBase2(selectedCarNumber, startDate, endDate);
+
+        reversedRecords = recordsFromBase2.concat(recordsFromBase1); // Concatenate records from both bases
         updatePageNavigation();
+
+        const totals = calculateTotals(reversedRecords);
+        displayTotalsCard(totals);
 
         if (reversedRecords.length > 0) {
             displayRecord(reversedRecords[0]); // Display the first record initially
@@ -28,14 +92,36 @@ async function fetchRecords() {
     } catch (err) {
         console.error('Error fetching Collection records:', err);
         displayNoRecordsBanner(); // Display the no records banner in case of an error
+    } finally {
+        showLoadingIndicator(false);
     }
 }
 
-// Function to add a new record
+// Function to calculate totals
+function calculateTotals(records) {
+    const totals = {
+        generalAnimals: 0,
+        dogs: 0,
+        otherAnimals: 0,
+        collected: 0,
+        toBeDeposited: 0
+    };
+
+    records.forEach(record => {
+        totals.generalAnimals += record.get('General Animals') || 0;
+        totals.dogs += record.get('Dogs') || 0;
+        totals.otherAnimals += record.get('Other Animals') || 0;
+        totals.collected += record.get('Collected') || 0;
+        totals.toBeDeposited += record.get('ToBeDeposited') || 0;
+    });
+
+    return totals;
+}
+
 async function addNewRecord(generalAnimals, dogs, otherAnimals, carNumber) {
     try {
         const date = new Date().toISOString(); // Current date and time in ISO format
-        await base('Collection').create({
+        await base2('Collection').create({
             "General Animals": generalAnimals,
             "Dogs": dogs,
             "Other Animals": otherAnimals,
@@ -47,7 +133,6 @@ async function addNewRecord(generalAnimals, dogs, otherAnimals, carNumber) {
         console.error('Error adding new record:', err);
     }
 }
-
 // Event listener for form submission
 document.getElementById('new-collection-form').addEventListener('submit', async function(event) {
     event.preventDefault();
@@ -114,7 +199,6 @@ function displayNoRecordsBanner() {
     recordContainer.appendChild(noRecordsBanner);
 }
 
-
 function displayRecord(record) {
     const recordContainer = document.getElementById('record-list');
     recordContainer.innerHTML = ''; // Clear existing content
@@ -155,4 +239,65 @@ function displayRecord(record) {
     card.appendChild(toBeDepositedElement);
 
     recordContainer.appendChild(card);
+}
+
+function displayTotalsCard(totals) {
+    const totalRecordsContainer = document.getElementById('total-records');
+    totalRecordsContainer.innerHTML = ''; // Clear existing content
+
+    const card = document.createElement('div');
+    card.classList.add('card', 'total-records-card');
+
+    // Get the start and end months
+    const currentDate = new Date();
+    let startMonthIndex, endMonthIndex;
+    if (currentDate.getDate() >= 16) {
+        startMonthIndex = currentDate.getMonth(); // Current month
+        endMonthIndex = (currentDate.getMonth() + 1) % 12; // Next month
+    } else {
+        startMonthIndex = (currentDate.getMonth() - 1 + 12) % 12; // Previous month
+        endMonthIndex = currentDate.getMonth(); // Current month
+    }
+    const startMonth = getMonthName(startMonthIndex);
+    const endMonth = getMonthName(endMonthIndex);
+
+    const titleElement = document.createElement('h3');
+    titleElement.textContent = `Total Records For ${startMonth}-${endMonth}`;
+    card.appendChild(titleElement);
+
+
+    const generalAnimalsElement = document.createElement('p');
+    generalAnimalsElement.textContent = `Total General Animals: ${totals.generalAnimals}`;
+    card.appendChild(generalAnimalsElement);
+
+    const dogsElement = document.createElement('p');
+    dogsElement.textContent = `Total Dogs: ${totals.dogs}`;
+    card.appendChild(dogsElement);
+
+    const otherAnimalsElement = document.createElement('p');
+    otherAnimalsElement.textContent = `Total Other Animals: ${totals.otherAnimals}`;
+    card.appendChild(otherAnimalsElement);
+
+    const collectedElement = document.createElement('p');
+    collectedElement.textContent = `Total Amount Collected: ${totals.collected}`;
+    card.appendChild(collectedElement);
+
+    const toBeDepositedElement = document.createElement('p');
+    toBeDepositedElement.textContent = `Total Amount to be Deposited: ${totals.toBeDeposited}`;
+    card.appendChild(toBeDepositedElement);
+
+    totalRecordsContainer.appendChild(card);
+}
+
+function getMonthName(monthIndex) {
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return monthNames[monthIndex];
+}
+function showLoadingIndicator(show) {
+    const loadingIndicator = document.getElementById('loading-indicator');
+    if (show) {
+        loadingIndicator.style.display = 'block';
+    } else {
+        loadingIndicator.style.display = 'none';
+    }
 }

@@ -64,12 +64,21 @@
 
         <section class="record-container">
             <h2 id="heading">Collection Records</h2>
+            <div id="loading-indicator" style="display: none;">Loading...</div>
+
             <div id="record-list" class="card"></div>
             <div class="pagination">
                 <button id="prev-page-btn">Prev</button>
                 <button id="next-page-btn">Next</button>
             </div>
         </section>
+
+        <section class="record-container">
+            <div id="loading-indicator" style="display: none;">Loading...</div>
+            <div id="total-records"></div>
+          
+        </section>
+       
     </main>
     
     <script src="/airtable.browser.js"></script>

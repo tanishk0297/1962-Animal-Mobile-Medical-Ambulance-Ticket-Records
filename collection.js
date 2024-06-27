@@ -1,10 +1,11 @@
 const Airtable = require('airtable');
 const base1 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
 const base2 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appCdJED3BCxjGlB4');
+const base3 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('app7u1ixwZ6YhhaLO');
 
 let currentPageIndex = 0;
 const itemsPerPage = 1; // Display only one item at a time
-let reversedRecords = [];
+let allRecords = [];
 let isLoading = false;
 
 // Function to get custom month range
@@ -56,6 +57,21 @@ async function fetchRecordsFromBase2(selectedCarNumber, startDate, endDate) {
     }
 }
 
+async function fetchRecordsFromBase3(selectedCarNumber, startDate, endDate) {
+    try {
+        const filterFormula = generateFilterFormula(selectedCarNumber, startDate, endDate);
+        const records = await base3('Collection').select({
+            maxRecords: 10000,
+            view: 'Grid view',
+            filterByFormula: filterFormula
+        }).firstPage();
+        return records.reverse(); // Reverse the array of records
+    } catch (err) {
+        console.error('Error fetching Collection records from base3:', err);
+        return []; // Return an empty array in case of an error
+    }
+}
+
 function generateFilterFormula(selectedCarNumber, startDate, endDate) {
     return `AND(
         {Car Number} = '${selectedCarNumber}',
@@ -68,22 +84,23 @@ function generateFilterFormula(selectedCarNumber, startDate, endDate) {
 async function fetchRecords() {
     try {
         showLoadingIndicator(true);
-        
+
         const selectedCarNumber = document.getElementById('car-number-selector').value;
         const currentDate = new Date();
         const { startDate, endDate } = getCustomMonthRange(currentDate);
 
         const recordsFromBase1 = await fetchRecordsFromBase1(selectedCarNumber, startDate, endDate);
         const recordsFromBase2 = await fetchRecordsFromBase2(selectedCarNumber, startDate, endDate);
+        const recordsFromBase3 = await fetchRecordsFromBase3(selectedCarNumber, startDate, endDate);
 
-        reversedRecords = recordsFromBase2.concat(recordsFromBase1); // Concatenate records from both bases
+        allRecords = recordsFromBase3.concat(recordsFromBase2, recordsFromBase1); // Concatenate records from all three bases
         updatePageNavigation();
 
-        const totals = calculateTotals(reversedRecords);
+        const totals = calculateTotals(allRecords);
         displayTotalsCard(totals);
 
-        if (reversedRecords.length > 0) {
-            displayRecord(reversedRecords[0]); // Display the first record initially
+        if (allRecords.length > 0) {
+            displayRecord(allRecords[0]); // Display the first record initially
         } else {
             displayNoRecordsBanner();
         }
@@ -121,7 +138,7 @@ function calculateTotals(records) {
 async function addNewRecord(generalAnimals, dogs, otherAnimals, carNumber) {
     try {
         const date = new Date().toISOString(); // Current date and time in ISO format
-        await base2('Collection').create({
+        await base3('Collection').create({
             "General Animals": generalAnimals,
             "Dogs": dogs,
             "Other Animals": otherAnimals,
@@ -133,13 +150,14 @@ async function addNewRecord(generalAnimals, dogs, otherAnimals, carNumber) {
         console.error('Error adding new record:', err);
     }
 }
+
 // Event listener for form submission
 document.getElementById('new-collection-form').addEventListener('submit', async function(event) {
     event.preventDefault();
     const generalAnimals = parseInt(document.getElementById('general-animals').value);
     const dogs = parseInt(document.getElementById('dogs').value);
     const otherAnimals = parseInt(document.getElementById('other-animals').value);
-    const carNumber = parseInt(document.getElementById('car-number-selector').value);
+    const carNumber = document.getElementById('car-number-selector').value;
 
     await addNewRecord(generalAnimals, dogs, otherAnimals, carNumber);
     await fetchRecords(); // Fetch the latest records based on selected car number and update the display
@@ -150,14 +168,14 @@ function updatePageNavigation() {
     const prevButton = document.getElementById('prev-page-btn');
     const nextButton = document.getElementById('next-page-btn');
     prevButton.disabled = currentPageIndex === 0;
-    nextButton.disabled = (currentPageIndex + 1) * itemsPerPage >= reversedRecords.length;
+    nextButton.disabled = (currentPageIndex + 1) * itemsPerPage >= allRecords.length;
 }
 
 // Function to fetch the next page of records
 function nextPage() {
     currentPageIndex++;
     const startIndex = currentPageIndex * itemsPerPage;
-    const record = reversedRecords[startIndex];
+    const record = allRecords[startIndex];
     if (record) {
         displayRecord(record);
     }
@@ -168,7 +186,7 @@ function nextPage() {
 function prevPage() {
     currentPageIndex--;
     const startIndex = currentPageIndex * itemsPerPage;
-    const record = reversedRecords[startIndex];
+    const record = allRecords[startIndex];
     if (record) {
         displayRecord(record);
     }
@@ -265,7 +283,6 @@ function displayTotalsCard(totals) {
     titleElement.textContent = `Total Records For ${startMonth}-${endMonth}`;
     card.appendChild(titleElement);
 
-
     const generalAnimalsElement = document.createElement('p');
     generalAnimalsElement.textContent = `Total General Animals: ${totals.generalAnimals}`;
     card.appendChild(generalAnimalsElement);
@@ -293,6 +310,7 @@ function getMonthName(monthIndex) {
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return monthNames[monthIndex];
 }
+
 function showLoadingIndicator(show) {
     const loadingIndicator = document.getElementById('loading-indicator');
     if (show) {

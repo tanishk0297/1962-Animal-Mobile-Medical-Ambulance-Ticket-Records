@@ -2,6 +2,7 @@ const Airtable = require('airtable');
 
 const base1 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
 const base2 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appCdJED3BCxjGlB4');
+const base3 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('app7u1ixwZ6YhhaLO');
 
 const vehicleDetails = {
     "1": { number: "MP-02-ZA-0104", location: "केसली" },
@@ -29,11 +30,19 @@ function getCurrentDate() {
 }
 
 function getBase(selectedDate) {
-    const cutoffDate = new Date('2024-06-01');
+    const cutoffDate1 = new Date('2024-06-01');
+    const cutoffDate2 = new Date('2024-06-27');
     const date = new Date(selectedDate);
 
-    return date < cutoffDate ? base1 : base2;
+    if (date >= cutoffDate2) {
+        return base3;
+    } else if (date < cutoffDate1) {
+        return base1;
+    } else {
+        return base2;
+    }
 }
+
 
 async function fetchAttendance(selectedDate) {
     try {

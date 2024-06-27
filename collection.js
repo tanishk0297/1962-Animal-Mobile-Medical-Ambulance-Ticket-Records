@@ -157,7 +157,7 @@ document.getElementById('new-collection-form').addEventListener('submit', async 
     const generalAnimals = parseInt(document.getElementById('general-animals').value);
     const dogs = parseInt(document.getElementById('dogs').value);
     const otherAnimals = parseInt(document.getElementById('other-animals').value);
-    const carNumber = document.getElementById('car-number-selector').value;
+    const carNumber = parseInt(document.getElementById('car-number-selector').value);
 
     await addNewRecord(generalAnimals, dogs, otherAnimals, carNumber);
     await fetchRecords(); // Fetch the latest records based on selected car number and update the display

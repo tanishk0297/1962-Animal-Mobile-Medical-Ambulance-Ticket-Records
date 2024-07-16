@@ -1,0 +1,132 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Records</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Roboto', sans-serif; /* Example of custom font */
+            background-color: #f3f4f6; /* Light grey background */
+        }
+        .container {
+            max-width: 1200px; /* Limit container width */
+            margin: auto; /* Center align container */
+            padding: 20px; /* Add padding for content */
+        }
+        h2 {
+            color: #1a202c; /* Dark text color */
+        }
+        .btn {
+            padding: 10px 20px; /* Padding for buttons */
+            margin-left: 10px; /* Space between buttons */
+        }
+        #date-selector {
+            display: flex; /* Flex layout for date selector */
+            align-items: center; /* Center items vertically */
+            margin-bottom: 20px; /* Space below date selector */
+        }
+        table {
+            width: 100%; /* Full width table */
+            background-color: #ffffff; /* White background */
+            border-collapse: collapse; /* Collapse table borders */
+            margin-top: 20px; /* Space above table */
+        }
+        th, td {
+            padding: 12px; /* Padding for table cells */
+            text-align: center; /* Center align table text */
+            border: 1px solid #d2d6dc; /* Light grey borders */
+        }
+        th {
+            background-color: #edf2f7; /* Light grey header background */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f8fafc; /* Alternate row background */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-3xl font-semibold mt-4">Monthly Records</h2>
+
+        <div id="date-selector" class="my-4">
+            <label for="from-date" class="font-bold">From Date:</label>
+            <input type="date" id="from-date" name="from-date" class="px-2 py-1 border rounded-md">
+
+            <label for="to-date" class="font-bold">To Date:</label>
+            <input type="date" id="to-date" name="to-date" class="px-2 py-1 border rounded-md">
+
+            <button onclick="fetchRecords()" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Fetch Records</button>
+            <button id="print-btn" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Print</button>
+        </div>
+
+        <table id="monthly-records">
+            <thead>
+                <tr>
+                    <th rowspan="2">Vehicle Number</th>
+                    <th rowspan="2">Location</th>
+                    <th colspan="5">Doctor</th>
+                    <th colspan="5">Paravet</th>
+                    <th colspan="5">Driver</th>
+                    <th rowspan="2">New Tickets</th>
+                    <th rowspan="2">Attended</th>
+                    <th rowspan="2">Amount Collected</th>
+                    <th rowspan="2">To Deposit</th>
+                </tr>
+                <tr>
+                    <th>P</th>
+                    <th>A</th>
+                    <th>WO</th>
+                    <th>LH</th>
+                    <th>CL</th>
+                    <th>P</th>
+                    <th>A</th>
+                    <th>WO</th>
+                    <th>LH</th>
+                    <th>CL</th>
+                    <th>P</th>
+                    <th>A</th>
+                    <th>WO</th>
+                    <th>LH</th>
+                    <th>CL</th>
+                </tr>
+            </thead>
+            <tbody id="records-body">
+                <!-- Loader and records will be dynamically added here -->
+            </tbody>
+        </table>
+
+        <div id="loader" class="loader"></div>
+    </div>
+
+    <script src="/airtable.browser.js"></script>
+    <script src="monthly.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('print-btn').addEventListener('click', function() {
+                document.body.classList.add('printing');
+                var style = document.createElement('style');
+                style.innerHTML = '@media print { @page { size: landscape; } }';
+                document.head.appendChild(style);
+                window.print();
+                document.body.classList.remove('printing');
+                document.head.removeChild(style);
+            });
+        });
+
+        function displayTable() {
+            document.getElementById('monthly-records').classList.remove('hidden');
+            document.getElementById('loader').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

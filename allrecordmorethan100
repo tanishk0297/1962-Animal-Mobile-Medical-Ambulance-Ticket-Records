@@ -1,0 +1,66 @@
+// Include the Airtable library
+const Airtable = require('airtable');
+
+const apiKey = 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2';
+const baseIds = ['appiv05sV7faHOuK6', 'appCdJED3BCxjGlB4', 'app7u1ixwZ6YhhaLO'];
+const tableNames = ['Attendance', 'Collection', 'Ticket Detail'];
+
+// Initialize Airtable bases
+const bases = baseIds.map(id => new Airtable({ apiKey }).base(id));
+
+// Function to fetch all records from a given base and table
+// Function to fetch all records from a given base and table
+async function fetchAllRecords(base, tableName, fromDate, toDate) {
+    const allRecords = [];
+
+    try {
+        const query = {
+            sort: [{ field: "Uid", direction: "desc" }],
+            view: 'Grid view',
+            filterByFormula: `AND(IS_AFTER({Date}, "${fromDate}"), IS_BEFORE({Date}, "${toDate}"))`,
+        };
+
+        await base(tableName)
+            .select(query)
+            .eachPage(
+                function page(records, fetchNextPage) {
+                    records.forEach(function(record) {
+                        allRecords.push(record);
+                    });
+                    fetchNextPage();
+                },
+                function done(err) {
+                    if (err) {
+                        console.error(`Error fetching records from ${tableName} in base:`, err);
+                        return;
+                    }
+                    console.log('All records fetched:', allRecords);
+                }
+            );
+    } catch (err) {
+        console.error(`Error fetching records from ${tableName} in base:`, err);
+    }
+
+    return allRecords;
+}
+
+
+// Function to fetch all data from all bases and tables
+async function fetchAllData() {
+    const allData = {};
+
+    for (const base of bases) {
+        const baseId = base._base._id; // Get the base ID
+        allData[baseId] = {};
+
+        for (const tableName of tableNames) {
+            const records = await fetchAllRecords(base, tableName);
+            allData[baseId][tableName] = records;
+        }
+    }
+
+    console.log(allData);
+    return allData;
+}
+
+fetchAllData();

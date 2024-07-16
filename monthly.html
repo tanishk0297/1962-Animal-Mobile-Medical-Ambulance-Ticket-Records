@@ -52,6 +52,37 @@
         tbody tr:nth-child(even) {
             background-color: #f8fafc; /* Alternate row background */
         }
+        @media print {
+        .hide-on-print {
+            display: none;
+        }
+    }
+    .loader {
+            border: 8px solid #f3f3f3;
+            /* Light grey */
+            border-top: 8px solid #3498db;
+            /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            /* Initially hidden */
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -65,9 +96,10 @@
             <label for="to-date" class="font-bold">To Date:</label>
             <input type="date" id="to-date" name="to-date" class="px-2 py-1 border rounded-md">
 
-            <button onclick="fetchRecords()" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Fetch Records</button>
-            <button id="print-btn" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Print</button>
-        </div>
+            <button onclick="fetchRecords()" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Fetch Records</button>
+            <button id="print-buttton" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Print</button>
+
+         </div>
 
         <table id="monthly-records">
             <thead>
@@ -112,7 +144,7 @@
     <script src="monthly.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('print-btn').addEventListener('click', function() {
+            document.getElementById('print-buttton').addEventListener('click', function() {
                 document.body.classList.add('printing');
                 var style = document.createElement('style');
                 style.innerHTML = '@media print { @page { size: landscape; } }';
@@ -123,10 +155,7 @@
             });
         });
 
-        function displayTable() {
-            document.getElementById('monthly-records').classList.remove('hidden');
-            document.getElementById('loader').style.display = 'none';
-        }
+        
     </script>
 </body>
 </html>

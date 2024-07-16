@@ -221,12 +221,14 @@ function updateTable(data) {
         const cellattended = document.createElement('td');
         cellattended.textContent = myArray[j].totalattended;
         row.appendChild(cellattended);
-        const cellcollected = document.createElement('td');
-        cellcollected.textContent = myArray[j].amountcollected;
-        row.appendChild(cellcollected);
-        const celltobedeposited = document.createElement('td');
-        celltobedeposited.textContent = myArray[j].tobedeposited;
-        row.appendChild(celltobedeposited);
+
+       const cellcollected = document.createElement('td');
+cellcollected.textContent = `₹ ${myArray[j].amountcollected}`;
+row.appendChild(cellcollected);
+
+const celltobedeposited = document.createElement('td');
+celltobedeposited.textContent = `₹ ${myArray[j].tobedeposited}`;
+row.appendChild(celltobedeposited);
 
         // Append the row to the table body
         recordsBody.appendChild(row);

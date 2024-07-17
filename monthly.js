@@ -8,7 +8,6 @@ const tableNames = ['Attendance', 'Collection', 'Ticket Detail'];
 // Initialize Airtable bases
 const bases = baseIds.map(id => new Airtable({ apiKey }).base(id));
 
-// Function to fetch all records from a given base and table
 async function fetchAllRecords(base, tableName, fromDate, toDate) {
     const allRecords = [];
     let offset = undefined;
@@ -18,7 +17,10 @@ async function fetchAllRecords(base, tableName, fromDate, toDate) {
             const options = {
                 sort: [{ field: "Uid", direction: "desc" }],
                 view: 'Grid view',
-                filterByFormula: `AND(IS_AFTER({Date}, "${fromDate}"), IS_BEFORE({Date}, "${toDate}"))`,
+                filterByFormula: `AND(
+                    OR(IS_SAME({Date}, "${fromDate}"), IS_AFTER({Date}, "${fromDate}")), 
+                    OR(IS_SAME({Date}, "${toDate}"), IS_BEFORE({Date}, "${toDate}"))
+                )`,
                 pageSize: 100
             };
 
@@ -39,6 +41,7 @@ async function fetchAllRecords(base, tableName, fromDate, toDate) {
 
     return allRecords;
 }
+
 
 
 // Function to fetch all data from all bases and tables within the date range

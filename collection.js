@@ -2,6 +2,7 @@ const Airtable = require('airtable');
 const base1 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
 const base2 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appCdJED3BCxjGlB4');
 const base3 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('app7u1ixwZ6YhhaLO');
+const base4 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appym1xh8nuBogY9r');
 
 let currentPageIndex = 0;
 const itemsPerPage = 1; // Display only one item at a time
@@ -56,7 +57,7 @@ async function fetchRecordsFromBase2(selectedCarNumber, startDate, endDate) {
         return []; // Return an empty array in case of an error
     }
 }
-
+// Function to fetch records based on selected car number from base2
 async function fetchRecordsFromBase3(selectedCarNumber, startDate, endDate) {
     try {
         const filterFormula = generateFilterFormula(selectedCarNumber, startDate, endDate);
@@ -68,6 +69,20 @@ async function fetchRecordsFromBase3(selectedCarNumber, startDate, endDate) {
         return records.reverse(); // Reverse the array of records
     } catch (err) {
         console.error('Error fetching Collection records from base3:', err);
+        return []; // Return an empty array in case of an error
+    }
+}
+async function fetchRecordsFromBase4(selectedCarNumber, startDate, endDate) {
+    try {
+        const filterFormula = generateFilterFormula(selectedCarNumber, startDate, endDate);
+        const records = await base4('Collection').select({
+            maxRecords: 10000,
+            view: 'Grid view',
+            filterByFormula: filterFormula
+        }).firstPage();
+        return records.reverse(); // Reverse the array of records
+    } catch (err) {
+        console.error('Error fetching Collection records from base4:', err);
         return []; // Return an empty array in case of an error
     }
 }
@@ -92,8 +107,9 @@ async function fetchRecords() {
         const recordsFromBase1 = await fetchRecordsFromBase1(selectedCarNumber, startDate, endDate);
         const recordsFromBase2 = await fetchRecordsFromBase2(selectedCarNumber, startDate, endDate);
         const recordsFromBase3 = await fetchRecordsFromBase3(selectedCarNumber, startDate, endDate);
+        const recordsFromBase4 = await fetchRecordsFromBase4(selectedCarNumber, startDate, endDate);
 
-        allRecords = recordsFromBase3.concat(recordsFromBase2, recordsFromBase1); // Concatenate records from all three bases
+        allRecords = recordsFromBase4.concat(recordsFromBase3, recordsFromBase2,recordsFromBase1); // Concatenate records from all three bases
         updatePageNavigation();
 
         const totals = calculateTotals(allRecords);
@@ -138,7 +154,7 @@ function calculateTotals(records) {
 async function addNewRecord(generalAnimals, dogs, otherAnimals, carNumber) {
     try {
         const date = new Date().toISOString(); // Current date and time in ISO format
-        await base3('Collection').create({
+        await base4('Collection').create({
             "General Animals": generalAnimals,
             "Dogs": dogs,
             "Other Animals": otherAnimals,

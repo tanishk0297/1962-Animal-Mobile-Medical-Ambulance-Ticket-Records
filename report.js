@@ -3,6 +3,7 @@ const Airtable = require('airtable');
 const base1 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appiv05sV7faHOuK6');
 const base2 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appCdJED3BCxjGlB4');
 const base3 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('app7u1ixwZ6YhhaLO');
+const base4 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appym1xh8nuBogY9r');
 
 const vehicleDetails = {
     "1": { number: "MP-02-ZA-0104", location: "केसली" },
@@ -32,16 +33,20 @@ function getCurrentDate() {
 function getBase(selectedDate) {
     const cutoffDate1 = new Date('2024-06-01');
     const cutoffDate2 = new Date('2024-06-27');
+    const cutoffDate3 = new Date('2024-07-22');
     const date = new Date(selectedDate);
 
-    if (date >= cutoffDate2) {
-        return base3;
-    } else if (date < cutoffDate1) {
-        return base1;
-    } else {
+    if (date >= cutoffDate3) {
+        return base4;
+    } else if (date >= cutoffDate2) {
         return base2;
+    } else if (date >= cutoffDate1) {
+        return base3;
+    } else {
+        return base1;
     }
 }
+
 
 
 async function fetchAttendance(selectedDate) {

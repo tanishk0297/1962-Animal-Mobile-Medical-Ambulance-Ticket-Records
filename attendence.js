@@ -87,6 +87,7 @@ async function fetchAttendance() {
         }).firstPage();
 
         attendanceRecords = records.map(record => ({
+            id: record.id, // Add record ID
             date: new Date(record.get('Date')).toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 day: 'numeric', 
@@ -117,6 +118,42 @@ async function fetchAttendance() {
     }
 }
 
+// delete record
+
+async function deleteLastRecord() {
+    try {
+        // Get the ID of the latest record (first in the array due to reversed order)
+        const latestRecordId = attendanceRecords[0]?.id;
+
+        if (!latestRecordId) {
+            alert('No records to delete.');
+            return;
+        }
+
+        // Delete the latest record from Airtable
+        await base('Attendance').destroy(latestRecordId);
+
+        // Remove the latest record from the local attendanceRecords array
+        attendanceRecords.shift();
+
+        // Update the displayed records
+        const startIndex = currentPageIndex * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const updatedRecords = attendanceRecords.slice(startIndex, endIndex);
+        displayAttendance(updatedRecords);
+
+        // Update pagination buttons
+        updatePageNavigation();
+
+        console.log('Latest attendance record deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting the attendance record:', error);
+        alert('Error deleting attendance record. Please try again.');
+    }
+}
+
+
+// delete record
 
 
 async function addAttendance(doctorStatus, assistantStatus, driverStatus, carNumber) {
@@ -146,6 +183,10 @@ async function addAttendance(doctorStatus, assistantStatus, driverStatus, carNum
 // Event listeners for pagination buttons
 document.getElementById('prev-btn').addEventListener('click', prevPage);
 document.getElementById('next-btn').addEventListener('click', nextPage);
+document.getElementById('delete-btn').addEventListener('click', async function() {
+    await deleteLastRecord();
+});
+
 
 // Event listener for the Submit Attendance button
 

@@ -233,6 +233,20 @@ function displayNoRecordsBanner() {
     recordContainer.appendChild(noRecordsBanner);
 }
 
+// Function to delete a record by its ID
+async function deleteRecord(recordId) {
+    try {
+        await base4('Collection').destroy(recordId);
+        console.log(`Record ${recordId} deleted successfully!`);
+        
+        // Re-fetch records to update the display
+        await fetchRecords();
+    } catch (err) {
+        console.error('Error deleting record:', err);
+    }
+}
+
+// Updated function to display a record with a delete button
 function displayRecord(record) {
     const recordContainer = document.getElementById('record-list');
     recordContainer.innerHTML = ''; // Clear existing content
@@ -272,6 +286,15 @@ function displayRecord(record) {
     toBeDepositedElement.textContent = `Amount to be Deposited: ${record.get('ToBeDeposited')}`;
     card.appendChild(toBeDepositedElement);
 
+    // Add a Delete Button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete Record';
+    deleteButton.classList.add('delete-button');
+    deleteButton.onclick = () => deleteRecord(record.id); // Call deleteRecord with record ID
+
+    card.appendChild(deleteButton);
+
+    // Append the card to the container
     recordContainer.appendChild(card);
 }
 

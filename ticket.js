@@ -154,6 +154,7 @@ function displayRecords(records, startIndex, endIndex) {
         if (i >= records.length) break; // Break if no more records
 
         const record = records[i];
+        const Uid = record.id;
         const newTicket = record.get('New Ticket');
         const pendingTicket = record.get('Pending Ticket');
         const attendedTicket = record.get('Attended Ticket');
@@ -222,7 +223,30 @@ function displayRecords(records, startIndex, endIndex) {
     commentValue.classList.add("ticket-value-comment");
     listItem.appendChild(commentValue);
 
-        ticketList.appendChild(listItem);
+    // Create Delete Button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.classList.add('delete-button');
+    deleteButton.onclick = () => deleteRecord(Uid, carNumber); // Call deleteRecord function
+    // deleteButton.onclick = () => console.log(Uid, carNumber); // Call deleteRecord function
+    listItem.appendChild(deleteButton);
+
+    ticketList.appendChild(listItem);
+    }
+}
+async function deleteRecord(Uid, carNumber) {
+    try {
+        console.log(`Attempting to delete record with Uid: ${Uid} and Car Number: ${carNumber}`);
+
+        // Delete the record by its Airtable record ID
+        await base('Ticket Detail').destroy(Uid);
+        console.log(`Record ${Uid} deleted successfully!`);
+
+        // Re-fetch the records for the current car number
+        await fetchRecordsForCar(carNumber);
+
+    } catch (err) {
+        console.error('Error deleting record:', err);
     }
 }
 

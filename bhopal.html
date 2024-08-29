@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhopal Report</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Roboto', sans-serif; /* Example of custom font */
+            background-color: #f3f4f6; /* Light grey background */
+        }
+        .container {
+            max-width: 12000px; /* Limit container width */
+            margin: auto; /* Center align container */
+            padding: 0px; /* Add padding for content */
+        }
+        h2 {
+            color: #1a202c; /* Dark text color */
+        }
+        .btn {
+            padding: 10px 20px; /* Padding for buttons */
+            margin-left: 10px; /* Space between buttons */
+        }
+        #date-selector {
+            display: flex; /* Flex layout for date selector */
+            align-items: center; /* Center items vertically */
+            margin-bottom: 20px; /* Space below date selector */
+        }
+        table {
+            width: 100%; /* Full width table */
+            background-color: #ffffff; /* White background */
+            border-collapse: collapse; /* Collapse table borders */
+            margin-top: 20px; /* Space above table */
+        }
+        th, td {
+            padding: 12px; /* Padding for table cells */
+            text-align: center; /* Center align table text */
+            border: 1px solid #d2d6dc; /* Light grey borders */
+        }
+        th {
+            background-color: #edf2f7; /* Light grey header background */
+            font-size: 14px; /* Adjusted font size for print */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f8fafc; /* Alternate row background */
+        }
+        @media print {
+            .hide-on-print {
+                display: none;
+            }
+            th, td {
+                font-size: 10px; /* Smaller font size for printing */
+            }
+            th {
+                padding: 8px; /* Reduced padding for headers */
+            }
+            td {
+                padding: 6px; /* Reduced padding for cells */
+            }
+            table {
+                width: 90%; /* Reduce table width to fit within print page */
+                margin: left; /* Center table horizontally */
+            }
+            @page {
+                size: landscape; /* Landscape orientation */
+                margin: none; /* Small page margins */
+            }
+        }
+        .loader {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Initially hidden */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-3xl font-semibold mt-4">Bhopal Report</h2>
+
+        <div id="date-selector" class="my-4">
+            <label for="report-date" class="font-bold">Select Date:</label>
+            <input type="date" id="report-date" name="report-date" class="px-2 py-1 border rounded-md">
+
+            <button onclick="fetchRecords()" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Fetch Records</button>
+            <button id="print-button" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Print</button>
+        </div>
+
+        <table id="bhopal-report">
+            <thead>
+                <tr>
+                    <th>Zile Ka Naam</th>
+                    <th>Vehicle Number</th>
+                    <th>Vikas Khand </th>
+                    <th colspan="2">Jile Se Prapt<br> Report Anusar</th>
+                    <th colspan="2">Bhopal Se Prapt<br> Report Anusar</th>
+                    <th colspan="3">Aaj Ki Report</th>
+                    <th>Aaj Total Attend <br>Kiye Ticket</th>
+                    <th>Aaj Total Attend Kiye <br>Ticket Se Prapt Rashi</th>
+                    <th>Vigat Din Ke Ticket Jo Aaj <br>Attend Kiye Gai Se Prapt Rashi</th>
+                    <th>Aaj Prapt Kul Rashi</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Prapt Ticket</th>
+                    <th>Attend Ticket</th>
+                    <th>Prapt Ticket</th>
+                    <th>Attend Ticket</th>
+                    <th>Pending</th>
+                    <th>Canceled</th>
+                    <th>Karan (Reason)</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="records-body">
+                <!-- Loader and records will be dynamically added here -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3">Total</th>
+                    <th id="total-jile-prapt"></th>
+                    <th id="total-jile-attend"></th>
+                    <th id="total-bhopal-prapt"></th>
+                    <th id="total-bhopal-attend"></th>
+                    <th id="total-pending"></th>
+                    <th id="total-canceled"></th>
+                    <th id="reason"></th>
+                    <th id="total-attend-today"></th>
+                    <th id="total-attend-today-amount"></th>
+                    <th id="total-previous-attend-amount"></th>
+                    <th id="total-today-amount"></th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div id="loader" class="loader"></div>
+    </div>
+
+    <script src="/airtable.browser.js"></script>
+    <script src="bhopal.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('print-button').addEventListener('click', function() {
+                document.body.classList.add('printing');
+                var style = document.createElement('style');
+                style.innerHTML = '@media print { @page { size: landscape; } }';
+                document.head.appendChild(style);
+                window.print();
+                document.body.classList.remove('printing');
+                document.head.removeChild(style);
+            });
+        });
+    </script>
+</body>
+</html>

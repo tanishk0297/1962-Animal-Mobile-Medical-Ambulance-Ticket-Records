@@ -53,9 +53,7 @@
             background-color: #f8fafc; /* Alternate row background */
         }
         @media print {
-            .hide-on-print {
-                display: none;
-            }
+            
             th, td {
                 font-size: 10px; /* Smaller font size for printing */
             }
@@ -194,7 +192,7 @@
     
                 // Clean up after printing
                 document.body.classList.remove('printing');
-                document.head.removeChild(style);
+                
             });
         });
     </script>

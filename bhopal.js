@@ -294,33 +294,80 @@ myArray.forEach(item => {
 
 
 
+// Create and append the 'reason' cell with a custom tag input
+const reason = document.createElement('td');
+reason.style.width = '400%';
 
-       // Create and append the 'reason' select drop-down
-       const reason = document.createElement('td');
-       reason.style.width = '400%'; 
-       
-       const reasonSelect = document.createElement('select');
-   
-       // Add options to the select drop-down
-       const reasons = [
-           '#Treated over phone',
-           '#Animal death',
-           '#Owner cancel his ticket from call centre',
-           '#Owner refuse for treatment (Animal become healthy)',
-           '#Animal treated by other AHW or Local vet',
-           '#Owner refuse to pay 150 rs/300rs'
-       ];
-   
-       reasons.forEach(reasonText => {
-           const option = document.createElement('option');
-           option.value = reasonText;
-           option.textContent = reasonText;
-           reasonSelect.appendChild(option);
-       });
-   
-       reason.appendChild(reasonSelect);
-       row.appendChild(reason);
-   
+// Create a container for the tags
+const tagContainer = document.createElement('div');
+tagContainer.classList.add('tag-container');
+reason.appendChild(tagContainer);
+
+// Create the input field for the custom tags
+const tagInput = document.createElement('input');
+tagInput.type = 'text';
+tagInput.classList.add('tag-input');
+tagInput.readOnly = true;  // Make the input field read-only to prevent manual typing
+reason.appendChild(tagInput);
+
+// Create the dropdown menu (initially hidden)
+const dropdown = document.createElement('div');
+dropdown.classList.add('dropdown-menu');
+dropdown.style.display = 'none';
+reason.appendChild(dropdown);
+
+const reasons = [
+    '#Treated over phone',
+    '#Animal death',
+    '#Owner cancel his ticket from call centre',
+    '#Owner refuse for treatment (Animal become healthy)',
+    '#Animal treated by other AHW or Local vet',
+    '#Owner refuse to pay 150 rs/300rs'
+];
+
+// Populate the dropdown menu with reasons
+reasons.forEach(reasonText => {
+    const option = document.createElement('div');
+    option.classList.add('dropdown-option');
+    option.textContent = reasonText;
+    option.addEventListener('click', () => {
+        addTag(reasonText);  // Add the selected reason as a tag
+        dropdown.style.display = 'none';  // Hide the dropdown menu after selection
+    });
+    dropdown.appendChild(option);
+});
+
+// Function to add a tag
+function addTag(text) {
+    const tag = document.createElement('span');
+    tag.classList.add('tag');
+    tag.textContent = text;
+
+    const removeBtn = document.createElement('span');
+    removeBtn.classList.add('remove-tag');
+    removeBtn.textContent = ',  ';
+    removeBtn.addEventListener('click', () => {
+        tagContainer.removeChild(tag);
+    });
+
+    tag.appendChild(removeBtn);
+    tagContainer.appendChild(tag);
+}
+
+// Show dropdown menu when the input field is clicked
+tagInput.addEventListener('click', () => {
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+});
+
+// Hide the dropdown if clicked outside
+document.addEventListener('click', (event) => {
+    if (!reason.contains(event.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+
+row.appendChild(reason);
+
 
 
 

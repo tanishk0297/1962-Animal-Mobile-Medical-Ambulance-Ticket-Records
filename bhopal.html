@@ -165,15 +165,39 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('print-button').addEventListener('click', function() {
+                // Add a class to body for printing
                 document.body.classList.add('printing');
+    
+                // Create a style element for print styles
                 var style = document.createElement('style');
-                style.innerHTML = '@media print { @page { size: landscape; } }';
+                style.innerHTML = `
+                    @media print {
+                        @page {
+                            size: landscape;
+                        }
+                        /* Ensure background graphics and colors are retained */
+                        body {
+                            background: inherit !important;
+                            color: inherit !important;
+                        }
+                        /* Ensure that specific elements retain background images or colors */
+                        .print-include-background {
+                            background: inherit !important;
+                            color: inherit !important;
+                        }
+                    }
+                `;
                 document.head.appendChild(style);
+    
+                // Trigger print
                 window.print();
+    
+                // Clean up after printing
                 document.body.classList.remove('printing');
                 document.head.removeChild(style);
             });
         });
     </script>
+    
 </body>
 </html>

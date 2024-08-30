@@ -102,7 +102,7 @@
             <input type="date" id="report-date" name="report-date" class="px-2 py-1 border rounded-md">
 
             <button onclick="fetchRecords()" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Fetch Records</button>
-            <button id="print-button" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Print</button>
+            <button id="print-button" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print" onclick="printInvoice()">Print</button>
         </div>
 
         <table id="bhopal-report">
@@ -163,17 +163,14 @@
     <script src="/airtable.browser.js"></script>
     <script src="bhopal.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('print-button').addEventListener('click', function() {
-                document.body.classList.add('printing');
-                var style = document.createElement('style');
-                style.innerHTML = '@media print { @page { size: landscape; } }';
-                document.head.appendChild(style);
-                window.print();
-                document.body.classList.remove('printing');
-                document.head.removeChild(style);
-            });
-        });
+       function printInvoice() {
+            
+            // Use window.print() to open the print dialog with the specified options
+            window.print();
+
+            
+           
+        }
     </script>
 </body>
 </html>

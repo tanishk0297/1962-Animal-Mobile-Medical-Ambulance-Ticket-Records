@@ -196,6 +196,23 @@ function recalculateColumnTotals(columnIndex) {
     }
 }
 
+function applyTotalColors() {
+    document.getElementById('total-jile-prapt').style.backgroundColor = '#ffff8d'; // Slightly Darker Buttery Yellow
+    document.getElementById('total-jile-attend').style.backgroundColor = '#ffff8d'; // Slightly Darker Mint Green
+    document.getElementById('total-bhopal-prapt').style.backgroundColor = '#79c336'; // Slightly Darker Pale Sky Blue
+    document.getElementById('total-bhopal-attend').style.backgroundColor = '#79c336'; // Slightly Darker Gentle Blush Pink
+    document.getElementById('total-pending').style.backgroundColor = '#ffb2a6'; // Slightly Darker Warm Peach
+    document.getElementById('total-canceled').style.backgroundColor = '#e0e0e0'; // Slightly Darker Light Salmon
+    document.getElementById('total-attend-today').style.backgroundColor = '#80deea'; // Slightly Darker Soft Lavender
+    document.getElementById('total-attend-today-amount').style.backgroundColor = '#c5a9e1'; // Slightly Darker Soft Golden Yellow
+    document.getElementById('total-previous-attend-amount').style.backgroundColor = '#e2eb9f'; // Slightly Darker Soft Aquamarine
+    document.getElementById('total-today-amount').style.backgroundColor = '#ce93d8'; // Slightly Darker Light Silver Gray
+}
+
+// Call the function to apply colors
+applyTotalColors();
+
+
     // Loop through the data and update myArray with fetched data
     for (let i = 0; i < myArray.length; i++) {
         for (const baseId in data) {
@@ -219,7 +236,7 @@ function recalculateColumnTotals(columnIndex) {
        
     }
 
-   // Populate the table rows
+ // Populate the table rows
 myArray.forEach(item => {
     const row = document.createElement('tr');
 
@@ -240,82 +257,144 @@ myArray.forEach(item => {
 
     const JilePrapt = document.createElement('td');
     JilePrapt.textContent = item.newtickets;
+    JilePrapt.style.backgroundColor='#ffffad'
     JilePrapt.contentEditable = "true";
     row.appendChild(JilePrapt);
 
     const JileAttend = document.createElement('td');
     JileAttend.textContent = item.attended;
+    JileAttend.style.backgroundColor='#ffffad'
     JileAttend.contentEditable = "true";
     row.appendChild(JileAttend);
 
     const BhopalPrapt = document.createElement('td');
     BhopalPrapt.textContent = item.newtickets;
     BhopalPrapt.contentEditable = "true";
+    BhopalPrapt.style.backgroundColor = "#beff80";
     row.appendChild(BhopalPrapt);
 
     const BhopalAttend = document.createElement('td');
     BhopalAttend.textContent = item.attended;
     BhopalAttend.contentEditable = "true";
+    BhopalAttend.style.backgroundColor = "#beff80";
     row.appendChild(BhopalAttend);
-
+    
     const Pending = document.createElement('td');
     Pending.textContent = item.PrevDaysPendingTicket;
+    Pending.style.backgroundColor = "#ffcdd2";
     Pending.contentEditable = "true";
     row.appendChild(Pending);
-
+    
     const Cancelled = document.createElement('td');
     Cancelled.textContent = item.CancelledTicket;
+    Cancelled.style.backgroundColor = "#f5f5f5";
     Cancelled.contentEditable = "true";
     row.appendChild(Cancelled);
 
-    const reason = document.createElement('td');
-    reason.textContent = '';
-    reason.contentEditable = "true";
-    row.appendChild(reason);
+
+
+
+
+       // Create and append the 'reason' select drop-down
+       const reason = document.createElement('td');
+       reason.style.width = '400%'; 
+       
+       const reasonSelect = document.createElement('select');
+   
+       // Add options to the select drop-down
+       const reasons = [
+           '#Treated over phone',
+           '#Animal death',
+           '#Owner cancel his ticket from call centre',
+           '#Owner refuse for treatment (Animal become healthy)',
+           '#Animal treated by other AHW or Local vet',
+           '#Owner refuse to pay 150 rs/300rs'
+       ];
+   
+       reasons.forEach(reasonText => {
+           const option = document.createElement('option');
+           option.value = reasonText;
+           option.textContent = reasonText;
+           reasonSelect.appendChild(option);
+       });
+   
+       reason.appendChild(reasonSelect);
+       row.appendChild(reason);
+   
+
+
+
 
     const TodayAttend = document.createElement('td');
     TodayAttend.textContent = item.attended; // Assuming 'attended' as today's attended
     TodayAttend.contentEditable = "true";
+    TodayAttend.style.backgroundColor = "#b2ebf2";
     row.appendChild(TodayAttend);
 
     // Create and append the 'todayamount' cell
-const todayamount = document.createElement('td');
-todayamount.textContent = item.collected;
-todayamount.contentEditable = "true";
-row.appendChild(todayamount);
+    const todayamount = document.createElement('td');
+    todayamount.textContent = item.collected;
+    todayamount.contentEditable = "true";
+    todayamount.style.backgroundColor = "#d1c4e9";
+    row.appendChild(todayamount);
 
-// Create and append the 'prevamount' cell
-const prevamount = document.createElement('td');
-prevamount.textContent = '0';
-prevamount.contentEditable = "true";
-row.appendChild(prevamount);
+    // Create and append the 'prevamount' cell
+    const prevamount = document.createElement('td');
+    prevamount.contentEditable = "true";
+    prevamount.style.backgroundColor = "#f0f4c3";
+    row.appendChild(prevamount);
 
-// Create and append the 'sumAmount' cell
-const sumAmount = document.createElement('td');
-sumAmount.contentEditable = "true";
-row.appendChild(sumAmount);
+    // Create and append the 'sumAmount' cell
+    const sumAmount = document.createElement('td');
+    sumAmount.contentEditable = "true";
+    sumAmount.style.backgroundColor = "#e1bee7";
+    row.appendChild(sumAmount);
 
-// Function to update the sumAmount cell
-function updateSumAmount() {
-    const todayValue = parseFloat(todayamount.textContent) || 0;
-    const prevValue = parseFloat(prevamount.textContent) || 0;
-    sumAmount.textContent = todayValue + prevValue;
-    recalculateColumnTotals(14);
-}
+    // Function to update the sumAmount cell
+    function updateSumAmount() {
+        const todayValue = parseFloat(todayamount.textContent) || 0;
+        const prevValue = parseFloat(prevamount.textContent) || 0;
+        sumAmount.textContent = todayValue + prevValue;
+        recalculateColumnTotals(14);
+        recalculateColumnTotals(12);
+        recalculateColumnTotals(13);
+    }
 
-// Initial update
-updateSumAmount();
+    // Function to calculate and update prevamount and todayamount
+    function updatePrevAmount() {
+        const jileAttendValue = parseFloat(JileAttend.textContent) || 0;
+        const bhopalAttendValue = parseFloat(BhopalAttend.textContent) || 0;
+        
+        // Calculate prevamount
+        const prevValue = (jileAttendValue - bhopalAttendValue) * 150;
+        prevamount.textContent = prevValue;
+        recalculateColumnTotals(13);
+        recalculateColumnTotals(12);
+        recalculateColumnTotals(14);
 
-// Add event listeners to update sumAmount when either todayamount or prevamount is changed
-todayamount.addEventListener('input', updateSumAmount);
-prevamount.addEventListener('input', updateSumAmount);
+        // Update todayamount based on bhopalAttendValue
+        todayamount.textContent = bhopalAttendValue * 150;
 
+        // Update sumAmount after updating prevamount and todayamount
+        updateSumAmount();
+    }
+  
+    // Initial updates
+    updatePrevAmount();
+    
+    updateSumAmount();
+
+    // Add event listeners to update sumAmount and prevamount when related fields change
+    todayamount.addEventListener('input', updateSumAmount);
+    prevamount.addEventListener('input', updateSumAmount);
+    JileAttend.addEventListener('input', updatePrevAmount);
+    BhopalAttend.addEventListener('input', updatePrevAmount);
 
     recordsBody.appendChild(row);
 
     // Attach event listeners to update totals for individual columns
-    [JilePrapt, JileAttend, BhopalPrapt, BhopalAttend, Pending, Cancelled,reason, TodayAttend, todayamount, prevamount, sumAmount].forEach((cell, index) => {
-        cell.addEventListener('input', () => { recalculateColumnTotals(index + 4)});
+    [JilePrapt, JileAttend, BhopalPrapt, BhopalAttend, Pending, Cancelled, reason, TodayAttend, todayamount, prevamount, sumAmount].forEach((cell, index) => {
+        cell.addEventListener('input', () => { recalculateColumnTotals(index + 4) });
     });
 });
 
@@ -330,6 +409,7 @@ recalculateColumnTotals(11); // Initial calculation for Today Attend
 recalculateColumnTotals(12); // Initial calculation for Today Amount
 recalculateColumnTotals(13); // Initial calculation for Previous Collected
 recalculateColumnTotals(14); // Initial calculation for Total Collected
+
 }
 // Function to show loading buffer
 function showDataLoader() {

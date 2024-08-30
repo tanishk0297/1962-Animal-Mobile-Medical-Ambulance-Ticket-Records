@@ -53,7 +53,9 @@
             background-color: #f8fafc; /* Alternate row background */
         }
         @media print {
-            
+            .hide-on-print {
+                display: none;
+            }
             th, td {
                 font-size: 10px; /* Smaller font size for printing */
             }
@@ -100,7 +102,7 @@
             <input type="date" id="report-date" name="report-date" class="px-2 py-1 border rounded-md">
 
             <button onclick="fetchRecords()" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Fetch Records</button>
-            <button id="print-button1">Print</button>
+            <button id="print-button" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Print</button>
         </div>
 
         <table id="bhopal-report">
@@ -162,40 +164,16 @@
     <script src="bhopal.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('print-button1').addEventListener('click', function() {
-                // Add a class to body for printing
+            document.getElementById('print-button').addEventListener('click', function() {
                 document.body.classList.add('printing');
-    
-                // Create a style element for print styles
                 var style = document.createElement('style');
-                style.innerHTML = `
-                    @media print {
-                        @page {
-                            size: landscape;
-                        }
-                        /* Ensure background graphics and colors are retained */
-                        body {
-                            background: inherit !important;
-                            color: inherit !important;
-                        }
-                        /* Ensure that specific elements retain background images or colors */
-                        .print-include-background {
-                            background: inherit !important;
-                            color: inherit !important;
-                        }
-                    }
-                `;
+                style.innerHTML = '@media print { @page { size: landscape; } }';
                 document.head.appendChild(style);
-    
-                // Trigger print
                 window.print();
-    
-                // Clean up after printing
                 document.body.classList.remove('printing');
-                
+                document.head.removeChild(style);
             });
         });
     </script>
-    
 </body>
 </html>

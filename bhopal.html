@@ -100,7 +100,7 @@
             <input type="date" id="report-date" name="report-date" class="px-2 py-1 border rounded-md">
 
             <button onclick="fetchRecords()" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Fetch Records</button>
-            <button id="print-button" class="btn bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 hide-on-print">Print</button>
+            <button id="print-button1">Print</button>
         </div>
 
         <table id="bhopal-report">
@@ -162,7 +162,7 @@
     <script src="bhopal.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('print-button').addEventListener('click', function() {
+            document.getElementById('print-button1').addEventListener('click', function() {
                 // Add a class to body for printing
                 document.body.classList.add('printing');
     

@@ -4,6 +4,7 @@ const base2 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d3
 const base3 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('app7u1ixwZ6YhhaLO');
 const base4 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appym1xh8nuBogY9r');
 const base5 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appna8sgnyyzTFRtL');
+const base6 = new Airtable({ apiKey: 'pat9fREdITpFW3UdB.13d5c2b0a2e5a4316b7124d354081bd11ced915241a18dc56a5b913501127ef2' }).base('appDb3Dttu2fjJl1b');
 
 let currentPageIndex = 0;
 const itemsPerPage = 1; // Display only one item at a time
@@ -101,6 +102,20 @@ async function fetchRecordsFromBase5(selectedCarNumber, startDate, endDate) {
         return []; // Return an empty array in case of an error
     }
 }
+async function fetchRecordsFromBase6(selectedCarNumber, startDate, endDate) {
+    try {
+        const filterFormula = generateFilterFormula(selectedCarNumber, startDate, endDate);
+        const records = await base6('Collection').select({
+            maxRecords: 10000,
+            view: 'Grid view',
+            filterByFormula: filterFormula
+        }).firstPage();
+        return records.reverse(); // Reverse the array of records
+    } catch (err) {
+        console.error('Error fetching Collection records from base6:', err);
+        return []; // Return an empty array in case of an error
+    }
+}
 
 function generateFilterFormula(selectedCarNumber, startDate, endDate) {
     return `AND(
@@ -124,8 +139,9 @@ async function fetchRecords() {
         const recordsFromBase3 = await fetchRecordsFromBase3(selectedCarNumber, startDate, endDate);
         const recordsFromBase4 = await fetchRecordsFromBase4(selectedCarNumber, startDate, endDate);
         const recordsFromBase5 = await fetchRecordsFromBase5(selectedCarNumber, startDate, endDate);
+        const recordsFromBase6 = await fetchRecordsFromBase6(selectedCarNumber, startDate, endDate);
 
-        allRecords = recordsFromBase5.concat(recordsFromBase4, recordsFromBase3,recordsFromBase2,recordsFromBase1); // Concatenate records from all three bases
+        allRecords = recordsFromBase6.concat(recordsFromBase5,recordsFromBase4, recordsFromBase3,recordsFromBase2,recordsFromBase1); // Concatenate records from all three bases
         updatePageNavigation();
 
         const totals = calculateTotals(allRecords);
@@ -170,7 +186,7 @@ function calculateTotals(records) {
 async function addNewRecord(generalAnimals, dogs, otherAnimals, carNumber) {
     try {
         const date = new Date().toISOString(); // Current date and time in ISO format
-        await base5('Collection').create({
+        await base6('Collection').create({
             "General Animals": generalAnimals,
             "Dogs": dogs,
             "Other Animals": otherAnimals,
@@ -252,7 +268,7 @@ function displayNoRecordsBanner() {
 // Function to delete a record by its ID
 async function deleteRecord(recordId) {
     try {
-        await base5('Collection').destroy(recordId);
+        await base6('Collection').destroy(recordId);
         console.log(`Record ${recordId} deleted successfully!`);
         
         // Re-fetch records to update the display

@@ -39,7 +39,7 @@ function getBase(selectedDate) {
     const cutoffDate3 = new Date('2024-07-22');
     const cutoffDate4 = new Date('2024-08-16');
     const cutoffDate5 = new Date('2024-09-10');
-    const cutoffDate6 = new Date('2024-10-07');
+    const cutoffDate6 = new Date('2024-10-06');
     const date = new Date(selectedDate);
 
     if (date >= cutoffDate6) {
